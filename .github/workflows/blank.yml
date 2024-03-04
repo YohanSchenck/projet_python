@@ -42,7 +42,7 @@ jobs:
         #run : pre-commit run --all-files
 
       - name: Run test
-        run: pytest --cov=app/ --cov-branch tests/
+        run: pytest
 
       # Runs a set of commands using the runners shell
       #- name: Run a multi-line script
