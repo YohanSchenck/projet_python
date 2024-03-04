@@ -23,7 +23,18 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11.5"
+          cache: 'pip'
+
+      - name : Set up depedencies
+        run: |
+          python -m pip install upgrade pip
+          pip install -r requirements.txt
 
       # Runs a single command using the runners shell
       - name: Run pre-commit
