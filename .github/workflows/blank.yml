@@ -39,7 +39,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run pre-commit
         #run: pre-commit run --from-ref origin/HEAD --to-ref HEAD
-        run : pre-commit run --from-ref origin/${{ github.event.pull_request.base.ref }} --to-ref ${{ github.event.pull_request.head.sha }}
+        run : pre-commit run --from-ref ORIG_HEAD --to-ref HEAD
 
       - name: Run test
         run: pytest --cov=app --cov-branch
