@@ -30,7 +30,7 @@ jobs:
         run: pre-commit run --from-ref origin/HEAD --to-ref HEAD
 
       - name: Run test
-        run: pytest --cov=app tests/
+        run: pytest --cov=app --cov-branch
 
       # Runs a set of commands using the runners shell
       #- name: Run a multi-line script
