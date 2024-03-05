@@ -15,7 +15,12 @@ strict-origin-when-cross-origin
 
 Démarche :
 
-- Passer une requête GET à l'url donné
-- Stocker en mémoire le fichier d'archive (format .gz)
-- Dézipper le fichier et extraire le .csv à l'intérieur (le nom du fichier dans l'archive sera synop.202401.csv)
-- Enregistrer le fichier dans un dossier csv qu'on créera si inexistant
+- **(WEBSITE)** Essayer de joindre le site web
+- Générer toutes les dates (format : AAAAMM) entre janvier 1996 et la date du jour
+- Boucler sur les étapes suivantes pour chaque date :
+    - Passer une requête GET à l'url donné
+    - Enregistrer en mémoire le fichier d'archive (format .gz)
+    - Accéder en mémoire à l'archive pour en faire un csv
+    - Accéder en mémoire au csv pour le transformer en json
+    - **(temporaire)** Stocker dans une dir json tous les fichiers
+    - **(WEBSITE)** Passer une requête POST au site web pour chaque json à envoyer
