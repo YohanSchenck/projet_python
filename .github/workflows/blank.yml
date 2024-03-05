@@ -45,7 +45,7 @@ jobs:
       - name: Run black
         run: black --check .
       - name: Run isort
-        run: isort --check --profile black.
+        run: isort --check --profile black .
 
       - name: Run pre-commit
         run: pre-commit run --from-ref origin/main --to-ref main
