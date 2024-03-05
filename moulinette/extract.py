@@ -41,4 +41,4 @@ for date in monthly_dates_generator:
         except gzip.BadGzipFile:
             print("Le contenu téléchargé n'est pas un fichier gzip valide.")
     else:
-        print(f"Échec du téléchargement de {url}. Vérifiez l'URL et réessayez.")
+        print(f"Url : {url} ne répond pas, vérifiez l'url fourni ou l'état du serveur.")
