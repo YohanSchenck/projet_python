@@ -1,32 +1,24 @@
 import requests
 import gzip
 import os
+import pandas as pd
+from io import BytesIO
 
-# URL du fichier à télécharger
 url = "https://donneespubliques.meteofrance.fr/donnees_libres/Txt/Synop/Archive/synop.202403.csv.gz"
-
-# Emplacement du dossier pour enregistrer le fichier CSV
-csv_folder = "csv"
-
-# Nom du fichier CSV à l'intérieur de l'archive
+csv_folder = "./csv"
 csv_filename = "synop.202403.csv"
-
-# Passer une requête GET à l'URL et télécharger le fichier .gz
 response = requests.get(url)
 
 print("Type de contenu:", response.headers.get('Content-Type'))  # Vérifier le type de contenu
 
 # Vérifier si la requête a réussi
 if response.status_code == 200:
-    # Sauvegarder temporairement le contenu pour inspection
-    temp_gz_path = "temp_download.gz"
-    with open(temp_gz_path, "wb") as temp_gz:
-        temp_gz.write(response.content)
-    print(f"Fichier temporaire {temp_gz_path} enregistré.")
+    # Obtenir le contenu de la réponse
+    content = response.content
     
-    # Essayer de décompresser le fichier sauvegardé
+    # Essayer de décompresser le contenu
     try:
-        with gzip.open(temp_gz_path, 'rb') as f_in:
+        with gzip.GzipFile(fileobj=BytesIO(content), mode='rb') as f_in:
             content = f_in.read()
             
             # Vérifier si le dossier csv existe, sinon le créer
