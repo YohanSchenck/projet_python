@@ -1,38 +1,47 @@
 import requests
 import gzip
-import os
 import pandas as pd
+import os
 from io import BytesIO
+from datetime import datetime
 
-url = "https://donneespubliques.meteofrance.fr/donnees_libres/Txt/Synop/Archive/synop.202403.csv.gz"
-csv_folder = "./csv"
-csv_filename = "synop.202403.csv"
-response = requests.get(url)
-
-print("Type de contenu:", response.headers.get('Content-Type'))  # Vérifier le type de contenu
-
-# Vérifier si la requête a réussi
-if response.status_code == 200:
-    # Obtenir le contenu de la réponse
-    content = response.content
+def generate_monthly_dates(start: str, end: str) -> list:
+    start_date = datetime.strptime(start, "%Y%m")
+    end_date = datetime.strptime(end, "%Y%m")
     
-    # Essayer de décompresser le contenu
-    try:
-        with gzip.GzipFile(fileobj=BytesIO(content), mode='rb') as f_in:
-            content = f_in.read()
-            
-            # Vérifier si le dossier csv existe, sinon le créer
-            if not os.path.exists(csv_folder):
-                os.makedirs(csv_folder)
-            
-            # Chemin complet pour enregistrer le fichier CSV
-            csv_path = os.path.join(csv_folder, csv_filename)
-            
-            # Enregistrer le contenu décompressé dans un fichier CSV
-            with open(csv_path, "wb") as csv_file:
-                csv_file.write(content)
-            print(f"Fichier {csv_filename} enregistré dans le dossier {csv_folder}.")
-    except gzip.BadGzipFile:
-        print("Le fichier téléchargé n'est pas un fichier gzip valide.")
-else:
-    print("Échec du téléchargement. Vérifiez l'URL et réessayez.")
+    dates = []
+    while start_date <= end_date:
+        dates.append(start_date.strftime("%Y%m"))
+        if start_date.month == 12:
+            start_date = datetime(start_date.year + 1, 1, 1)
+        else:
+            start_date = datetime(start_date.year, start_date.month + 1, 1)
+    
+    return dates
+
+json_folder = "./json"
+base_url = "https://donneespubliques.meteofrance.fr/donnees_libres/Txt/Synop/Archive/synop.{date}.csv.gz"
+monthly_dates = generate_monthly_dates("199601", datetime.now().strftime("%Y%m"))
+
+for date in monthly_dates:
+    url = base_url.format(date=date)
+    json_filename = f"synop.{date}.json"
+    
+    response = requests.get(url)
+    print(f"GET {url}")
+    
+    if response.status_code == 200:
+        content = response.content
+        try:
+            with gzip.open(BytesIO(content), 'rt', encoding='utf-8') as f_mem:
+                df = pd.read_csv(f_mem, sep=';')
+                df_clean = df[['numer_sta', 'date', 'ff', 't']]
+            if not os.path.exists(json_folder):
+                os.makedirs(json_folder)
+            json_path = os.path.join(json_folder, json_filename)
+            df_clean.to_json(json_path, orient='records', lines=True)
+            print(f"Fichier {json_filename} enregistré dans le dossier {json_folder}.")
+        except gzip.BadGzipFile:
+            print("Le contenu téléchargé n'est pas un fichier gzip valide.")
+    else:
+        print(f"Échec du téléchargement de {url}. Vérifiez l'URL et réessayez.")
