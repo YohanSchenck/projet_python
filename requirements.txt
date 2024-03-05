@@ -13,6 +13,7 @@ httptools==0.6.1
 identify==2.5.35
 idna==3.6
 iniconfig==2.0.0
+isort==5.13.2
 mypy==1.8.0
 mypy-extensions==1.0.0
 nodeenv==1.8.0
