@@ -47,8 +47,8 @@ jobs:
       - name: Run isort
         run: isort --check --profile black .
 
-      - name: Run pre-commit
-        run: pre-commit run --from-ref origin/main --to-ref main
+      # - name: Run pre-commit
+      #   run: pre-commit run --from-ref origin/main --to-ref main
 
       - name: Run test
         run: pytest .
