@@ -1,3 +1,4 @@
+import sqlalchemy
 from sqlalchemy import Engine, create_engine, text
 
 engine = create_engine("sqlite:///database.db", echo=True)
@@ -19,6 +20,6 @@ def create_database(engine: Engine, list_query: list):
 # create_database(engine, list_query)
 
 
-# print(sqlalchemy.inspect(engine).get_table_names())
+print(sqlalchemy.inspect(engine).get_table_names()[0])
 
 # print(sqlalchemy.inspect(engine).get_columns("Donnees_brutes"))
