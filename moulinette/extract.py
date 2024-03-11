@@ -30,9 +30,7 @@ monthly_dates_generator = generate_monthly_dates_generator(
 )
 
 
-def process_date(
-        date: str
-    ) -> None:
+def process_date(date: str) -> None:
     url = base_url.format(date=date)
     json_filename = f"synop.{date}.json"
 
@@ -48,21 +46,32 @@ def process_date(
                     columns={
                         "numer_sta": "station_id",
                         "ff": "wind",
-                        "t": "temperature", 
+                        "t": "temperature",
                     }
                 )
-                df['date'] = pd.to_datetime(df['date'], format='%Y%m%d%H%M%S')
-                df['year'] = df['date'].dt.year
-                df['month'] = df['date'].dt.month
-                df['week'] = df['date'].dt.isocalendar().week
-                df['day'] = df['date'].dt.day
-                df['hour'] = df['date'].dt.hour
-                df['temperature'] = pd.to_numeric(df['temperature'], errors='coerce')
-                df['temperature'].fillna(value=0, inplace=True)
-                df['temperature'] = pd.to_numeric(df['wind'], errors='coerce')
-                df['temperature'].fillna(value=0, inplace=True)
-                df['temperature'] = df['temperature'] - 273.15
-                df_clean = df[["station_id", "year", "month", "week", "day", "hour", "wind", "temperature"]]
+                df["date"] = pd.to_datetime(df["date"], format="%Y%m%d%H%M%S")
+                df["year"] = df["date"].dt.year
+                df["month"] = df["date"].dt.month
+                df["week"] = df["date"].dt.isocalendar().week
+                df["day"] = df["date"].dt.day
+                df["hour"] = df["date"].dt.hour
+                df["temperature"] = pd.to_numeric(df["temperature"], errors="coerce")
+                df["temperature"].fillna(value=0, inplace=True)
+                df["wind"] = pd.to_numeric(df["wind"], errors="coerce")
+                df["wind"].fillna(value=0, inplace=True)
+                df["temperature"] = df["temperature"] - 273.15
+                df_clean = df[
+                    [
+                        "station_id",
+                        "year",
+                        "month",
+                        "week",
+                        "day",
+                        "hour",
+                        "wind",
+                        "temperature",
+                    ]
+                ]
             if not os.path.exists(json_folder):
                 os.makedirs(json_folder)
             json_path = os.path.join(json_folder, json_filename)
