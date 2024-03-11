@@ -83,5 +83,6 @@ def process_date(date: str) -> None:
         print(f"Url : {url} ne répond pas, vérifiez l'url fourni ou l'état du serveur.")
 
 
+# Multiprocessing
 with ThreadPoolExecutor(max_workers=128) as executor:
     executor.map(process_date, monthly_dates_generator)
