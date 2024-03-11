@@ -1,3 +1,81 @@
+body {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-image: url('./assets/background.png');
+  background-size: cover;
+  background-attachment: fixed;
+}
+
 h1 {
-  color: green;
+  font-size: 2em;
+  color: #000000;
+  margin-bottom: 20px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  background-image: url('./assets/H1.png');
+  background-size: 2000px;
+  background-attachment: fixed;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.5em;
+  color: #000000;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  background-attachment: fixed;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+.link-button {
+  position: relative;
+  display: inline-block; /* Permet au lien de prendre des propriétés de padding/margin comme un élément block */
+  padding: 8px 16px;
+  color: #ffffff; /* Couleur initiale du texte */
+  text-decoration: none; /* Enlève le soulignement par défaut */
+  transition: 0.5s; /* Animation de transition */
+  overflow: hidden;
+  border: 1px solid #ffffff; /* Bordure orange */
+}
+
+.link-button:hover {
+  background: #675fdd; /* Couleur de fond au survol */
+  color: #fff; /* Couleur du texte au survol */
+  box-shadow: 0 0 5px #675fdd, 0 0 25px #675fdd, 0 0 50px #675fdd, 0 0 200px #675fdd; /* Effet de lueur */
+}
+
+.racoon {
+  position: relative;
+  display: inline-block; /* Permet le centrage si nécessaire et applique le padding */
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc; /* Ajoute une légère bordure pour délimiter l'élément */
+  text-decoration: none; /* Supprime le soulignement par défaut des liens */
+  color: #000; /* Définit une couleur de texte */
+  transition: all 0.3s ease; /* Anime les changements d'état, comme le survol */
+  cursor: pointer; /* Change le curseur pour indiquer la possibilité de cliquer */
+}
+
+.racoon:hover {
+  background-color: #f0f0f0; /* Légère modification au survol */
+  border-color: #888; /* Assombrit la bordure au survol */
+  transform: translateY(-2px); /* Soulève légèrement l'élément au survol */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ajoute une ombre pour donner de la profondeur */
 }
