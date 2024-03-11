@@ -20,8 +20,8 @@ repos:
       - id: mypy
         types: [python]
         additional_dependencies:
-        -   "pydantic==v2.6.2"
-        -   "sqlmodel==0.0.16"
+        -   "pydantic==v1.9.0"
+        -   "sqlmodel==0.0.12"
         -   "fastapi==0.110.0"
         args: ["--strict", "--ignore-missing-imports", "--config-file", "pyproject.toml" ]
 
