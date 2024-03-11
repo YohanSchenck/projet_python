@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/style.css" />
     <title>Document</title>
   </head>
   <body>
@@ -11,7 +12,9 @@
     <a href="/">Home</a>
     <ul>
       {% for chart in charts %}
-      <li><a href="/chart/?chart={{ chart.href }}">{{ chart.name }}</a></li>
+      <li>
+        <a href="/chart/?chart={{ chart }}">{{ chart }}</a>
+      </li>
       {% endfor %}
     </ul>
   </body>

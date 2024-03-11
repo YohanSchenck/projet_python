@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List
 
 import os
 
@@ -16,13 +16,12 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
-def get_all_charts() -> List[Dict[str, str]]:
+def get_all_charts() -> List[str]:
     charts = []
     for file in os.listdir("static/charts/"):
         if file.endswith(".gif") or file.endswith(".png") or file.endswith(".jpg"):
             filename = file.split(".")[0]
-            file_info = {"name": filename, "href": file}
-            charts.append(file_info)
+            charts.append(filename)
     return charts
 
 
@@ -40,11 +39,10 @@ async def post(meteo: List[Meteo]) -> List[Meteo]:
 
 
 @app.get("/chart/", response_class=HTMLResponse)
-async def chart(
+async def get_chart(
     request: Request,
-    chart_name: str = "temperature",
+    chart: str = "temperature",
 ) -> HTMLResponse:
-    print(chart_name)
     return templates.TemplateResponse(
-        name="chart.html", request=request, context={"chart": "test.gif"}
+        name="chart.html", request=request, context={"chart": chart}
     )
