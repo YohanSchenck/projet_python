@@ -59,6 +59,8 @@ def process_date(
                 df['hour'] = df['date'].dt.hour
                 df['temperature'] = pd.to_numeric(df['temperature'], errors='coerce')
                 df['temperature'].fillna(value=0, inplace=True)
+                df['temperature'] = pd.to_numeric(df['wind'], errors='coerce')
+                df['temperature'].fillna(value=0, inplace=True)
                 df['temperature'] = df['temperature'] - 273.15
                 df_clean = df[["station_id", "year", "month", "week", "day", "hour", "wind", "temperature"]]
             if not os.path.exists(json_folder):
