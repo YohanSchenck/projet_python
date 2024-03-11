@@ -1,21 +1,75 @@
+from datetime import datetime
 from typing import Any, List
 
-from sqlalchemy import Engine, create_engine, text
+from sqlmodel import Session, SQLModel, create_engine
+
+from model import Meteo
 
 engine = create_engine("sqlite:///database.db", echo=True)
 
-list_query: List[Any] = [
-    "CREATE TABLE Donnees_brutes (date date,ID_Station int, temp decimal, vent decimal)",
-    "CREATE TABLE Evolution_temp (annee int, ID_Station int, temp decimal)",
-    "CREATE TABLE Evolution_vent (annee int, jour int, ID_Station int, vent decimal)",
-    "CREATE TABLE Ecart_temp (annee int, semaine int, ID_Station int, ecart_temp decimal)",
-]
+
+def create_database(engine: Any) -> None:
+    """
+    Create the file database.db
+
+    Parameters
+    ----------
+    engine : database
+
+    Returns
+    -------
+    """
+    SQLModel.metadata.create_all(engine)
 
 
-def create_database(engine: Engine, list_query: List[Any]) -> None:
-    with engine.connect() as conn:
-        for query in list_query:
-            conn.execute(text(query))
+date = datetime.now()
+
+meteo1 = Meteo(
+    station_id=102,
+    year=date.year,
+    month=date.month,
+    day=date.day,
+    hour=date.hour,
+    wind=20.5,
+    temperature=10.3,
+)
+meteo2 = Meteo(
+    station_id=123,
+    year=date.year,
+    month=date.month,
+    day=date.day,
+    hour=date.hour,
+    wind=23.5,
+    temperature=10.3,
+)
+
+data: List[Meteo] = []
+
+data.append(meteo1)
+data.append(meteo2)
+
+# print(data)
 
 
-# create_database(engine, list_query)
+def insert_data(engine: Any, data: List[Meteo]) -> None:
+    """
+    Insert the list of data into the database
+
+    Parameters
+    ----------
+    engine : database
+
+    data : list of data. Type can be the different models
+
+    Returns
+    -------
+    """
+    with Session(engine) as session:
+        for row in data:
+            session.add(row)
+
+        session.commit()
+
+
+create_database(engine)
+insert_data(engine, data)

@@ -19,7 +19,10 @@ repos:
     hooks:
       - id: mypy
         types: [python]
-        args: [--strict, --ignore-missing-imports]
+        additional_dependencies:
+        -   "pydantic==v2.6.2"
+        -   "sqlmodel==0.0.16"
+        args: ["--strict", "--ignore-missing-imports", "--config-file", "pyproject.toml" ]
 
   - repo: https://github.com/ambv/black
     rev: 22.8.0
