@@ -22,6 +22,7 @@ repos:
         additional_dependencies:
         -   "pydantic==v2.6.2"
         -   "sqlmodel==0.0.16"
+        -   "fastapi==0.110.0"
         args: ["--strict", "--ignore-missing-imports", "--config-file", "pyproject.toml" ]
 
   - repo: https://github.com/ambv/black
