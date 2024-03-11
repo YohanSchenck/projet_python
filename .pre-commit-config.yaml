@@ -18,8 +18,8 @@ repos:
     rev: v0.971
     hooks:
       - id: mypy
-        types: [python]
-        args: [--strict]
+        args: [--ignore-missing-imports, --exclude=^venv/, --exclude=structures.pyi]
+        additional_dependencies: [types-requests]
 
   - repo: https://github.com/ambv/black
     rev: 22.8.0

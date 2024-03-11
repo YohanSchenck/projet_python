@@ -24,3 +24,9 @@ Démarche :
     - Accéder en mémoire au csv pour le transformer en json
     - **(temporaire)** Stocker dans une dir json tous les fichiers
     - **(WEBSITE)** Passer une requête POST au site web pour chaque json à envoyer
+
+
+Activer env :
+```bash
+.\venv\Scripts\activate
+```
