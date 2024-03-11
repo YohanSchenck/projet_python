@@ -44,14 +44,23 @@ def process_date(
         try:
             with gzip.open(BytesIO(content), "rt", encoding="utf-8") as f_mem:
                 df = pd.read_csv(f_mem, sep=";")
-                df_clean = df.rename(
+                df = df.rename(
                     columns={
                         "numer_sta": "station_id",
-                        "date": "date",
                         "ff": "wind",
-                        "t": "temperature",
+                        "t": "temperature", 
                     }
-                )[["station_id", "date", "wind", "temperature"]]
+                )
+                df['date'] = pd.to_datetime(df['date'], format='%Y%m%d%H%M%S')
+                df['year'] = df['date'].dt.year
+                df['month'] = df['date'].dt.month
+                df['week'] = df['date'].dt.isocalendar().week
+                df['day'] = df['date'].dt.day
+                df['hour'] = df['date'].dt.hour
+                df['temperature'] = pd.to_numeric(df['temperature'], errors='coerce')
+                df['temperature'].fillna(value=0, inplace=True)
+                df['temperature'] = df['temperature'] - 273.15
+                df_clean = df[["station_id", "year", "month", "week", "day", "hour", "wind", "temperature"]]
             if not os.path.exists(json_folder):
                 os.makedirs(json_folder)
             json_path = os.path.join(json_folder, json_filename)
@@ -63,5 +72,5 @@ def process_date(
         print(f"Url : {url} ne répond pas, vérifiez l'url fourni ou l'état du serveur.")
 
 
-with ThreadPoolExecutor(max_workers=64) as executor:
+with ThreadPoolExecutor(max_workers=128) as executor:
     executor.map(process_date, monthly_dates_generator)
