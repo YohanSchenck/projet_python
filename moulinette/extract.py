@@ -30,7 +30,9 @@ monthly_dates_generator = generate_monthly_dates_generator(
 )
 
 
-def process_date(date: str) -> None:
+def process_date(
+        date: str
+    ) -> None:
     url = base_url.format(date=date)
     json_filename = f"synop.{date}.json"
 
