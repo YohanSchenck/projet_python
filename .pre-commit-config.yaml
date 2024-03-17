@@ -23,7 +23,7 @@ repos:
         -   "pydantic==v2.6.2"
         -   "sqlmodel==0.0.16"
         -   "fastapi==0.110.0"
-        args: ["--ignore-missing-imports",  "--exclude", "/tests/"]
+        args: ["--ignore-missing-imports",  "--exclude", "/tests/",  "--config-file", "pyproject.toml"]
 
   - repo: https://github.com/ambv/black
     rev: 22.8.0
