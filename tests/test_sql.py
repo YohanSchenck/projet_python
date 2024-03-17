@@ -1,20 +1,44 @@
-from typing import Any, List
+from datetime import datetime
+from typing import List
 
-from app.sql import create_database
-from sqlalchemy import Engine, create_engine, inspect, types
+import pytest
+from app.model import Meteo
+from app.sql import insert_data
+from sqlmodel import Session, SQLModel, create_engine, select
 
 
-def test_create_database() -> None:
-    queries: List[Any] = ["CREATE TABLE Test (date date,ID int, temp decimal)"]
+@pytest.fixture
+def init_database():
+    engine = create_engine("sqlite:///:memory:", echo=True)
+    SQLModel.metadata.create_all(engine)
+    return engine
 
-    engine: Engine = create_engine("sqlite:///:memory:", echo=True)
 
-    create_database(engine, queries)
+def test_insert_data(init_database) -> None:
+    data: List[Meteo] = []
+    date = datetime.now()
 
-    assert (inspect(engine).get_table_names()[0]) == "Test"
-    assert (inspect(engine).get_columns("Test")[0].get("name")) == "date"
-    assert (type(inspect(engine).get_columns("Test")[0].get("type"))) == types.DATE
-    assert (inspect(engine).get_columns("Test")[1].get("name")) == "ID"
-    assert (type(inspect(engine).get_columns("Test")[1].get("type"))) == types.INT
-    assert (inspect(engine).get_columns("Test")[2].get("name")) == "temp"
-    assert (type(inspect(engine).get_columns("Test")[2].get("type"))) == types.DECIMAL
+    engine = init_database
+
+    meteo1 = Meteo(
+        station_id=102,
+        year=date.year,
+        month=date.month,
+        day=date.day,
+        hour=date.hour,
+        wind=20.5,
+        temperature=10.3,
+    )
+    data.append(meteo1)
+
+    insert_data(engine, data)
+
+    with Session(engine) as session:
+        statement = select(Meteo)
+        result = session.exec(statement).all()
+        assert (result[0].station_id) == 102
+        assert (result[0].year) == 2024
+        assert (result[0].month) == 3
+        assert (result[0].day) == 11
+        assert (result[0].wind) == 20.5
+        assert (result[0].temperature) == 10.3
