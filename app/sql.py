@@ -1,9 +1,10 @@
+import sqlite3
 from typing import Any, List
 
-from pandas import DataFrame
+from pandas import DataFrame, read_sql_query
 from sqlmodel import Session, SQLModel, create_engine
 
-from app.model import Meteo
+from model import Meteo
 
 
 def create_db() -> None:
@@ -17,7 +18,8 @@ def create_db() -> None:
     -------
     """
 
-    engine = create_engine("sqlite:///:memory:", echo=True)
+    # engine = create_engine("sqlite:///:memory:", echo=True)
+    engine = create_engine("sqlite:///database.db", echo=True)
     SQLModel.metadata.create_all(engine)
 
 
@@ -43,11 +45,60 @@ def insert_data(engine: Any, data: List[Meteo]) -> None:
 
 
 def get_evolution_temp() -> DataFrame:
-    # con = sqlite3.connect("data/portal_mammals.sqlite")
-    # df = pd.read_sql_query("SELECT * from surveys", con)
+    """
+    Get the evolution of temperature
 
-    # Verify that result of SQL query is stored in the dataframe
-    # print(df.head())
+    Parameters
+    ----------
 
-    # con.close()
-    return DataFrame
+
+    Returns
+    -------
+    Dataframe containing the data structured (station_id, year, avg_temp)
+    """
+    con = sqlite3.connect("database.db")
+    df = read_sql_query(
+        "SELECT station_id, year, AVG(temperature) from Meteo GROUP BY station_id, year",
+        con,
+    )
+    return df
+
+
+def get_evolution_wind() -> DataFrame:
+    """
+    Get the evolution of wind
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+    Dataframe containing the data structured (station_id, year,day avg_wind)
+    """
+    con = sqlite3.connect("database.db")
+    df = read_sql_query(
+        "SELECT station_id, year,day, AVG(wind) from Meteo GROUP BY station_id, year, day",
+        con,
+    )
+    return df
+
+
+def get_evolution_diff_temperature() -> DataFrame:
+    """
+    Get the evolution of the temperature difference
+
+    Parameters
+    ----------
+
+
+    Returns
+    -------
+    Dataframe containing the data structured (station_id, year,week,  diff_wind)
+    """
+    con = sqlite3.connect("database.db")
+    df = read_sql_query(
+        "SELECT station_id, year, week, (MAX(temperature) - MIN(temperature)) as difference from Meteo GROUP BY station_id, year, week",
+        con,
+    )
+    return df
