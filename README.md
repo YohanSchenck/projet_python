@@ -36,3 +36,8 @@ Activer env :
 ```bash
 .\venv\Scripts\activate
 ```
+
+Run Moulinette sans compromettre le module
+```bash
+python -m moulinette.upload
+```

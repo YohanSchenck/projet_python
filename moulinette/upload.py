@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 import requests
 import json
 
-from extract import monthly_dates_generator, request_data, process_data
+from moulinette.extract import monthly_dates_generator, request_data, process_data
 
 POST_URL = "http://localhost:8000/upload/"
 

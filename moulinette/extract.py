@@ -35,7 +35,7 @@ def request_data(request_date: str) -> pd.DataFrame:
     return data
 
 
-def process_data(df: pd.DataFrame) -> dict:
+def process_data(df: pd.DataFrame) -> str:
     df.rename(
         columns={
             "numer_sta": "station_id",
