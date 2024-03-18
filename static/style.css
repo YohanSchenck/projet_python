@@ -19,6 +19,12 @@ h1 {
   background-size: 2000px;
   background-attachment: fixed;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+h1:hover {
+  transform: rotate(-5deg);
 }
 
 h2 {
@@ -43,39 +49,58 @@ img {
   max-width: 100%;
   height: auto;
 }
+
 .link-button {
   position: relative;
-  display: inline-block; /* Permet au lien de prendre des propriétés de padding/margin comme un élément block */
+  display: inline-block;
   padding: 8px 16px;
-  color: #ffffff; /* Couleur initiale du texte */
-  text-decoration: none; /* Enlève le soulignement par défaut */
-  transition: 0.5s; /* Animation de transition */
+  color: #ffffff;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
-  border: 1px solid #ffffff; /* Bordure orange */
+  border: 1px solid #ffffff;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .link-button:hover {
-  background: #675fdd; /* Couleur de fond au survol */
-  color: #fff; /* Couleur du texte au survol */
-  box-shadow: 0 0 5px #675fdd, 0 0 25px #675fdd, 0 0 50px #675fdd, 0 0 200px #675fdd; /* Effet de lueur */
+  background: #675fdd;
+  color: #fff;
+  box-shadow: 0 0 5px #675fdd, 0 0 25px #675fdd, 0 0 50px #675fdd, 0 0 200px #675fdd;
+  transform: scale(1.1);
+}
+
+.link-button:active {
+  transform: translateY(2px);
 }
 
 .racoon {
   position: relative;
-  display: inline-block; /* Permet le centrage si nécessaire et applique le padding */
+  display: inline-block;
   background-color: white;
   padding: 10px;
   border-radius: 10px;
-  border: 1px solid #ccc; /* Ajoute une légère bordure pour délimiter l'élément */
-  text-decoration: none; /* Supprime le soulignement par défaut des liens */
-  color: #000; /* Définit une couleur de texte */
-  transition: all 0.3s ease; /* Anime les changements d'état, comme le survol */
-  cursor: pointer; /* Change le curseur pour indiquer la possibilité de cliquer */
+  border: 1px solid #ccc;
+  text-decoration: none;
+  color: #000;
+  transition: all 0.3s ease, transform 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .racoon:hover {
-  background-color: #f0f0f0; /* Légère modification au survol */
-  border-color: #888; /* Assombrit la bordure au survol */
-  transform: translateY(-2px); /* Soulève légèrement l'élément au survol */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ajoute une ombre pour donner de la profondeur */
+  background-color: #f0f0f0;
+  border-color: #888;
+  transform: translateY(-2px) scale(1.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 
 import requests
+import json
 
 from extract import monthly_dates_generator, request_data, process_data
 
@@ -9,7 +10,7 @@ POST_URL = "http://localhost:8000/upload/"
 
 def upload_data(data: str) -> requests.Response:
     headers = {"Content-Type": "application/json"}
-    send_data = {"rows": data}
+    send_data = {"rows": json.loads(data)}
     return requests.post(POST_URL, json=send_data, headers=headers, timeout=60)
 
 
