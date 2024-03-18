@@ -4,7 +4,21 @@ from pandas import DataFrame, read_sql_query
 from sqlalchemy import Engine
 from sqlmodel import Session, SQLModel, create_engine
 
-from app.model import Meteo
+from model import Meteo
+
+
+def get_engine() -> Engine:
+    """
+    Get the database engine
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+    Engine : database engine
+    """
+    return create_engine("sqlite:///database/database.db", echo=True)
 
 
 def create_db() -> None:
@@ -17,11 +31,11 @@ def create_db() -> None:
     Returns
     -------
     """
-    engine = create_engine("sqlite:///database.db", echo=True)
+    engine = get_engine()
     SQLModel.metadata.create_all(engine)
 
 
-def insert_data(engine: Engine, data: List[Meteo]) -> None:
+def insert_data(data: List[Meteo]) -> None:
     """
     Insert the list of data into the database
 
@@ -35,14 +49,14 @@ def insert_data(engine: Engine, data: List[Meteo]) -> None:
     -------
     """
 
-    with Session(engine) as session:
+    with Session(get_engine()) as session:
         for row in data:
             session.add(row)
 
         session.commit()
 
 
-def get_evolution_temp(engine: Engine) -> DataFrame:
+def get_evolution_temp() -> DataFrame:
     """
     Get the evolution of temperature
 
@@ -54,15 +68,15 @@ def get_evolution_temp(engine: Engine) -> DataFrame:
     -------
     Dataframe containing the data structured (station_id, year, avg_temp)
     """
-    with engine.connect() as con:
+    with get_engine().connect() as con:
         df = read_sql_query(
-            "SELECT station_id, year, AVG(temperature) from Meteo GROUP BY station_id, year",
+            "SELECT station_id, year, day, AVG(temperature) as avg_temp from Meteo GROUP BY station_id, year, day",
             con,
         )
     return df
 
 
-def get_evolution_wind(engine: Engine) -> DataFrame:
+def get_evolution_wind() -> DataFrame:
     """
     Get the evolution of wind
 
@@ -74,15 +88,15 @@ def get_evolution_wind(engine: Engine) -> DataFrame:
     -------
     Dataframe containing the data structured (station_id, year,day avg_wind)
     """
-    with engine.connect() as con:
+    with get_engine().connect() as con:
         df = read_sql_query(
-            "SELECT station_id, year,day, AVG(wind) from Meteo GROUP BY station_id, year, day",
+            "SELECT station_id, year,day, AVG(wind) as avg_wind from Meteo GROUP BY station_id, year, day",
             con,
         )
     return df
 
 
-def get_evolution_diff_temperature(engine: Engine) -> DataFrame:
+def get_evolution_diff_temperature() -> DataFrame:
     """
     Get the evolution of the temperature difference
 
@@ -93,7 +107,7 @@ def get_evolution_diff_temperature(engine: Engine) -> DataFrame:
     -------
     Dataframe containing the data structured (station_id, year,week,  diff_temp)
     """
-    with engine.connect() as con:
+    with get_engine().connect() as con:
         df = read_sql_query(
             "SELECT station_id, year, week, (MAX(temperature) - MIN(temperature)) as difference from Meteo GROUP BY station_id, year, week",
             con,

@@ -11,7 +11,7 @@ POST_URL = "http://localhost:8000/upload/"
 def upload_data(data: str) -> requests.Response:
     headers = {"Content-Type": "application/json"}
     send_data = json.loads(data)
-    return requests.post(POST_URL, json=send_data, headers=headers, timeout=60)
+    return requests.post(POST_URL, json=send_data, headers=headers, timeout=20)
 
 
 def combinatoire(monthly_date: str) -> requests.Response:
@@ -29,4 +29,3 @@ if __name__ == "__main__":
         data = request_data(monthly_date)
         processed_data = process_data(data)
         response = upload_data(processed_data)
-        break

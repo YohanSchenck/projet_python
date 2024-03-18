@@ -1,27 +1,30 @@
 import os
-from typing import List
+from typing import List, Union
 
 import pytest
 from app.model import Meteo
-from app.sql import (
+from app.sql_commands import (
     create_db,
     get_evolution_diff_temperature,
     get_evolution_temp,
     get_evolution_wind,
     insert_data,
 )
+from sqlalchemy import Engine
 from sqlmodel import Session, SQLModel, create_engine, select
+
+Fixture = Union
 
 
 @pytest.fixture
-def init_database():
+def init_database() -> Engine:
     engine = create_engine("sqlite:///:memory:", echo=True)
     SQLModel.metadata.create_all(engine)
     return engine
 
 
 @pytest.fixture
-def create_2_Meteo():
+def create_2_Meteo() -> List[Meteo]:
     data: List[Meteo] = []
 
     meteo1 = Meteo(

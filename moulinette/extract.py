@@ -1,4 +1,4 @@
-import gzip
+from gzip import BadGzipFile
 from datetime import datetime
 
 from typing import Iterator
@@ -28,7 +28,7 @@ def request_data(request_date: str) -> pd.DataFrame:
 
     try:
         data = pd.read_csv(url, sep=";", compression="gzip")
-    except (gzip.BadGzipFile, requests.exceptions.RequestException) as error:
+    except (BadGzipFile, requests.exceptions.RequestException) as error:
         print(f"Error while fetching data for {url}: {error}")
         return
 
@@ -49,7 +49,7 @@ def process_data(df: pd.DataFrame) -> dict:
     df.loc[:, "year"] = df["date"].dt.year
     df.loc[:, "month"] = df["date"].dt.month
     df.loc[:, "week"] = df["date"].dt.isocalendar().week
-    df.loc[:, "day"] = df["date"].dt.dayofyear()
+    df.loc[:, "day"] = df["date"].dt.dayofyear
     df.loc[:, "hour"] = df["date"].dt.hour
 
     df.loc[:, "temperature"] = pd.to_numeric(df["temperature"], errors="coerce")

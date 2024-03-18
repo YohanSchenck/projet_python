@@ -2,3 +2,5 @@
 minversion = "6.0"
 
 addopts = "-s -vv --cov=app --cov=moulinette --cov-branch"
+
+[tool.ruff]
