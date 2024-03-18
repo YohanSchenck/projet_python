@@ -49,7 +49,7 @@ def process_data(df: pd.DataFrame) -> dict:
     df.loc[:, "year"] = df["date"].dt.year
     df.loc[:, "month"] = df["date"].dt.month
     df.loc[:, "week"] = df["date"].dt.isocalendar().week
-    df.loc[:, "day"] = df["date"].dt.dayofyear()
+    df.loc[:, "day"] = df["date"].dt.dayofyear
     df.loc[:, "hour"] = df["date"].dt.hour
 
     df.loc[:, "temperature"] = pd.to_numeric(df["temperature"], errors="coerce")
