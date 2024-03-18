@@ -1,9 +1,10 @@
+import os
 from datetime import datetime
 from typing import List
 
 import pytest
 from app.model import Meteo
-from app.sql import insert_data
+from app.sql import create_db, insert_data
 from sqlmodel import Session, SQLModel, create_engine, select
 
 
@@ -39,6 +40,11 @@ def test_insert_data(init_database) -> None:
         assert (result[0].station_id) == 102
         assert (result[0].year) == 2024
         assert (result[0].month) == 3
-        assert (result[0].day) == 11
+        assert (result[0].day) == date.day
         assert (result[0].wind) == 20.5
         assert (result[0].temperature) == 10.3
+
+
+def test_create_database() -> None:
+    create_db()
+    assert (os.path.isfile("database.db")) is True
