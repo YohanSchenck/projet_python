@@ -16,6 +16,7 @@ def monthly_dates_generator(
 
     while start_date <= end_date:
         yield start_date.strftime("%Y%m")
+
         if start_date.month == 12:
             start_date = datetime(start_date.year + 1, 1, 1)
         else:
@@ -57,7 +58,8 @@ def process_data(df: pd.DataFrame) -> dict:
 
 
 if __name__ == "__main__":
-    for date in monthly_dates_generator():
-        print(f"Processing data for {date}...")
-        request_data("")
+    for monthly_date in monthly_dates_generator():
+        print(f"Processing data for {monthly_date} ...")
+        request_data(monthly_date)
+
         break

@@ -1,6 +1,8 @@
-import requests
 from concurrent.futures import ThreadPoolExecutor
-from moulinette.extract import monthly_dates_generator, request_data, process_data
+
+import requests
+
+from extract import monthly_dates_generator, request_data, process_data
 
 POST_URL = "http://localhost:8000/upload/"
 
@@ -20,4 +22,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    for monthly_date in monthly_dates_generator():
+        print(f"Processing data for {monthly_date} ...")
+        combinatoire(monthly_date)
+        break
