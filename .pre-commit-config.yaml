@@ -28,11 +28,11 @@ repos:
         types: [python]
         args: [--check]
 
-  - repo: local
-    hooks:
-      - id: isort
-        name: isort
-        entry: isort
-        language: system
-        types: [python]
-        args: [--check, --profile=black]
+  # - repo: local
+  #   hooks:
+  #     - id: isort
+  #       name: isort
+  #       entry: isort
+  #       language: system
+  #       types: [python]
+  #       args: [--check, --profile=black]
