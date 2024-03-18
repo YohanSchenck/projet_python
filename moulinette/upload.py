@@ -24,5 +24,12 @@ def main() -> None:
 if __name__ == "__main__":
     for monthly_date in monthly_dates_generator():
         print(f"Processing data for {monthly_date} ...")
-        combinatoire(monthly_date)
+        data = request_data(monthly_date)
+        print(type(data))
+
+        processed_data = process_data(data)
+        print(type(processed_data))
+
+        response = upload_data(processed_data)
+        print(response.status_code)
         break

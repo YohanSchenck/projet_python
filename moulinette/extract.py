@@ -42,17 +42,21 @@ def process_data(df: pd.DataFrame) -> dict:
         },
         inplace=True,
     )
-    df = df[["station_id", "date", "temperature", "wind"]]
-    df["date"] = pd.to_datetime(df["date"], format="%Y%m%d%H%M%S")
-    df["year"] = df["date"].dt.year
-    df["month"] = df["date"].dt.month
-    df["week"] = df["date"].dt.isocalendar().week
-    df["day"] = df["date"].dt.day
-    df["hour"] = df["date"].dt.hour
-    df["temperature"] = pd.to_numeric(df["temperature"], errors="coerce")
-    df["wind"] = pd.to_numeric(df["wind"], errors="coerce")
+    df.loc[:, "date"] = pd.to_datetime(
+        df["date"], format="%Y%m%d%H%M%S", errors="coerce"
+    )
+    df.loc[:, "year"] = df["date"].dt.year
+    df.loc[:, "month"] = df["date"].dt.month
+    df.loc[:, "week"] = df["date"].dt.isocalendar().week
+    df.loc[:, "day"] = df["date"].dt.day
+    df.loc[:, "hour"] = df["date"].dt.hour
+    df.loc[:, "temperature"] = pd.to_numeric(df["temperature"], errors="coerce")
+    df.loc[:, "wind"] = pd.to_numeric(df["wind"], errors="coerce")
+
     df.dropna(inplace=True)
-    df["temperature"] = df["temperature"] - 273.15
+
+    df.loc[:, "temperature"] = df["temperature"] - 273.15
+
     df.drop("date", axis=1, inplace=True)
     return df.to_json(orient="records", lines=False)
 
