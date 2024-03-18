@@ -7,9 +7,10 @@ from extract import monthly_dates_generator, request_data, process_data
 POST_URL = "http://localhost:8000/upload/"
 
 
-def upload_data(data: dict) -> requests.Response:
+def upload_data(data: str) -> requests.Response:
     headers = {"Content-Type": "application/json"}
-    return requests.post(POST_URL, data=data, headers=headers, timeout=15)
+    send_data = {"rows": data}
+    return requests.post(POST_URL, json=send_data, headers=headers, timeout=60)
 
 
 def combinatoire(monthly_date: str) -> requests.Response:
@@ -25,11 +26,12 @@ if __name__ == "__main__":
     for monthly_date in monthly_dates_generator():
         print(f"Processing data for {monthly_date} ...")
         data = request_data(monthly_date)
-        print(type(data))
 
         processed_data = process_data(data)
-        print(type(processed_data))
-
+        # save to txt file
+        # with open(f"data_{monthly_date}.txt", "w") as file:
+        #     file.write(processed_data)
         response = upload_data(processed_data)
-        print(response.status_code)
+
+        print(response)
         break

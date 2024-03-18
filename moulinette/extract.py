@@ -25,11 +25,13 @@ def monthly_dates_generator(
 
 def request_data(request_date: str) -> pd.DataFrame:
     url = BASE_URL.format(date=request_date)
+
     try:
         data = pd.read_csv(url, sep=";", compression="gzip")
     except (gzip.BadGzipFile, requests.exceptions.RequestException) as error:
         print(f"Error while fetching data for {url}: {error}")
         return
+
     return data
 
 
@@ -42,22 +44,24 @@ def process_data(df: pd.DataFrame) -> dict:
         },
         inplace=True,
     )
-    df.loc[:, "date"] = pd.to_datetime(
-        df["date"], format="%Y%m%d%H%M%S", errors="coerce"
-    )
+    df["date"] = pd.to_datetime(df["date"], format="%Y%m%d%H%M%S", errors="coerce")
+
     df.loc[:, "year"] = df["date"].dt.year
     df.loc[:, "month"] = df["date"].dt.month
     df.loc[:, "week"] = df["date"].dt.isocalendar().week
     df.loc[:, "day"] = df["date"].dt.day
     df.loc[:, "hour"] = df["date"].dt.hour
+
     df.loc[:, "temperature"] = pd.to_numeric(df["temperature"], errors="coerce")
     df.loc[:, "wind"] = pd.to_numeric(df["wind"], errors="coerce")
 
-    df.dropna(inplace=True)
+    df = df[
+        ["station_id", "year", "month", "week", "day", "hour", "temperature", "wind"]
+    ]
+
+    df = df.dropna()
 
     df.loc[:, "temperature"] = df["temperature"] - 273.15
-
-    df.drop("date", axis=1, inplace=True)
     return df.to_json(orient="records", lines=False)
 
 

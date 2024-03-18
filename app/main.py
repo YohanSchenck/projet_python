@@ -6,7 +6,7 @@ from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
-
+from app.model import Requested_data
 
 app = FastAPI()
 
@@ -33,9 +33,8 @@ async def root(request: Request) -> HTMLResponse:
 
 
 @app.post("/upload/")
-async def post(meteo: dict) -> dict:
-    print(type(meteo))
-    return meteo
+async def post(test: Requested_data) -> Requested_data:
+    return test
 
 
 @app.get("/chart/", response_class=HTMLResponse)
