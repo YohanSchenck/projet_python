@@ -6,7 +6,10 @@ from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
-from app.model import Requested_data
+from app.model import Meteo
+
+from pydantic import ValidationError
+from fastapi import HTTPException
 
 app = FastAPI()
 
@@ -33,8 +36,13 @@ async def root(request: Request) -> HTMLResponse:
 
 
 @app.post("/upload/")
-async def post(test: Requested_data) -> Requested_data:
-    return test
+async def post(meteos: List[Meteo]) -> List[Meteo]:
+    for item in meteos:
+        try:
+            item.model_validate(item)
+        except ValidationError as exc:
+            raise HTTPException(status_code=422, detail=exc.errors()) from exc
+    return meteos
 
 
 @app.get("/chart/", response_class=HTMLResponse)

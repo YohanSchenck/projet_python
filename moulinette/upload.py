@@ -10,7 +10,7 @@ POST_URL = "http://localhost:8000/upload/"
 
 def upload_data(data: str) -> requests.Response:
     headers = {"Content-Type": "application/json"}
-    send_data = {"rows": json.loads(data)}
+    send_data = json.loads(data)
     return requests.post(POST_URL, json=send_data, headers=headers, timeout=60)
 
 
@@ -27,12 +27,6 @@ if __name__ == "__main__":
     for monthly_date in monthly_dates_generator():
         print(f"Processing data for {monthly_date} ...")
         data = request_data(monthly_date)
-
         processed_data = process_data(data)
-        # save to txt file
-        # with open(f"data_{monthly_date}.txt", "w") as file:
-        #     file.write(processed_data)
         response = upload_data(processed_data)
-
-        print(response)
         break

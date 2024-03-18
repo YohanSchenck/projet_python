@@ -1,19 +1,14 @@
-from typing import List
-from pydantic import BaseModel
+from typing import Optional
+from sqlmodel import SQLModel, Field
 
 
-class MeteoIn(BaseModel):
-    """Meteo data model."""
-
+class Meteo(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
     station_id: int
     year: int
     month: int
     week: int
     day: int
     hour: int
-    temperature: float
     wind: float
-
-
-class Requested_data(BaseModel):
-    rows: List[MeteoIn]
+    temperature: float
