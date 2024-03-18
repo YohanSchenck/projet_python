@@ -4,7 +4,7 @@ from pandas import DataFrame, read_sql_query
 from sqlalchemy import Engine
 from sqlmodel import Session, SQLModel, create_engine
 
-from model import Meteo
+from app.model import Meteo
 
 
 def get_engine() -> Engine:

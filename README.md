@@ -36,3 +36,5 @@ Activer env :
 ```bash
 .\venv\Scripts\activate
 ```
+
+Donnnées chargés jusqu'a 2000-01 inclu
