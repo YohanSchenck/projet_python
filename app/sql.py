@@ -91,7 +91,7 @@ def get_evolution_diff_temperature(engine: Engine) -> DataFrame:
 
     Returns
     -------
-    Dataframe containing the data structured (station_id, year,week,  diff_wind)
+    Dataframe containing the data structured (station_id, year,week,  diff_temp)
     """
     with engine.connect() as con:
         df = read_sql_query(
