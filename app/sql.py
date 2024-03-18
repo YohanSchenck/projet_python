@@ -1,6 +1,7 @@
-from typing import Any, List
+from typing import List
 
 from pandas import DataFrame, read_sql_query
+from sqlalchemy import Engine
 from sqlmodel import Session, SQLModel, create_engine
 
 from app.model import Meteo
@@ -20,7 +21,7 @@ def create_db() -> None:
     SQLModel.metadata.create_all(engine)
 
 
-def insert_data(engine: Any, data: List[Meteo]) -> None:
+def insert_data(engine: Engine, data: List[Meteo]) -> None:
     """
     Insert the list of data into the database
 
@@ -41,7 +42,7 @@ def insert_data(engine: Any, data: List[Meteo]) -> None:
         session.commit()
 
 
-def get_evolution_temp() -> DataFrame:
+def get_evolution_temp(engine: Engine) -> DataFrame:
     """
     Get the evolution of temperature
 
@@ -53,8 +54,6 @@ def get_evolution_temp() -> DataFrame:
     -------
     Dataframe containing the data structured (station_id, year, avg_temp)
     """
-
-    engine = create_engine("sqlite:///database.db", echo=True)
     with engine.connect() as con:
         df = read_sql_query(
             "SELECT station_id, year, AVG(temperature) from Meteo GROUP BY station_id, year",
@@ -63,7 +62,7 @@ def get_evolution_temp() -> DataFrame:
     return df
 
 
-def get_evolution_wind() -> DataFrame:
+def get_evolution_wind(engine: Engine) -> DataFrame:
     """
     Get the evolution of wind
 
@@ -75,7 +74,6 @@ def get_evolution_wind() -> DataFrame:
     -------
     Dataframe containing the data structured (station_id, year,day avg_wind)
     """
-    engine = create_engine("sqlite:///database.db", echo=True)
     with engine.connect() as con:
         df = read_sql_query(
             "SELECT station_id, year,day, AVG(wind) from Meteo GROUP BY station_id, year, day",
@@ -84,7 +82,7 @@ def get_evolution_wind() -> DataFrame:
     return df
 
 
-def get_evolution_diff_temperature() -> DataFrame:
+def get_evolution_diff_temperature(engine: Engine) -> DataFrame:
     """
     Get the evolution of the temperature difference
 
@@ -95,7 +93,6 @@ def get_evolution_diff_temperature() -> DataFrame:
     -------
     Dataframe containing the data structured (station_id, year,week,  diff_wind)
     """
-    engine = create_engine("sqlite:///database.db", echo=True)
     with engine.connect() as con:
         df = read_sql_query(
             "SELECT station_id, year, week, (MAX(temperature) - MIN(temperature)) as difference from Meteo GROUP BY station_id, year, week",
