@@ -18,12 +18,12 @@ repos:
     rev: v1.9.0
     hooks:
       - id: mypy
-        types: [python]
+        args: [--ignore-missing-imports, --exclude=structures.pyi]
         additional_dependencies:
-        -   "pydantic==v2.6.2"
-        -   "sqlmodel==0.0.16"
-        -   "fastapi==0.110.0"
-        args: ["--ignore-missing-imports",  "--exclude", "/tests/",  "--config-file", "pyproject.toml"]
+          - "pydantic"
+          - "types-requests"
+          - "fastapi"
+          - "sqlmodel"
 
   - repo: https://github.com/ambv/black
     rev: 22.8.0
@@ -32,12 +32,11 @@ repos:
         types: [python]
         args: [--check]
 
-
-  #- repo: local
-    #hooks:
-      #- id: isort
-        #name: isort
-        #entry: isort
-        #language: system
-        #types: [python]
-        #args: [--check]
+  # - repo: local
+  #   hooks:
+  #     - id: isort
+  #       name: isort
+  #       entry: isort
+  #       language: system
+  #       types: [python]
+  #       args: [--check, --profile=black]

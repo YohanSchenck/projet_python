@@ -1,3 +1,4 @@
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-s -vv --cov=app --cov-branch"
+
+addopts = "-s -vv --cov=app --cov=moulinette --cov-branch"

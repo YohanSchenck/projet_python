@@ -8,7 +8,7 @@ class Meteo(SQLModel, table=True):
     station_id: int
     year: int
     month: int
-    week: Optional[int] = None
+    week: int
     day: int
     hour: int
     wind: float
