@@ -19,7 +19,7 @@ def create_graph_evol_temp() -> None:
         df_station.plot(kind="line", x="date", y="avg_temp")
         plt.grid()
         plt.gca().xaxis.set_major_locator(plt.matplotlib.dates.YearLocator())
-        plt.savefig(f"static/charts/evol_temp_{station}.png")
+        plt.savefig(f"static/charts/evolution_temperature/{station}.png")
         plt.close()
 
 
@@ -36,9 +36,9 @@ def create_graph_wind() -> None:
         )
         df_station.plot(kind="bar", x="year", y="avg_wind")
         plt.grid()
-        plt.savefig(f"static/charts/evol_wind_{station}.png")
+        plt.savefig(f"static/charts/evolution_wind/{station}.png")
         plt.close()
 
 
-# create_graph_evol_temp()
+create_graph_evol_temp()
 create_graph_wind()
