@@ -26,7 +26,6 @@ def create_graph_evol_temp() -> None:
 def create_graph_wind() -> None:
     df = get_evolution_wind()
     wind_force = 4.16
-    df
     df = df[df["avg_wind"] <= wind_force].sort_values(by=["year"])
     list_station = df["station_id"].unique()
 
