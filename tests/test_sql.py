@@ -1,5 +1,5 @@
 import os
-from typing import List, Union
+from typing import List
 
 import pytest
 from data_management.model import Meteo
@@ -12,8 +12,6 @@ from data_management.sql_commands import (
 )
 from sqlalchemy import Engine
 from sqlmodel import Session, SQLModel, create_engine, select
-
-Fixture = Union
 
 
 @pytest.fixture
