@@ -76,6 +76,27 @@ def get_evolution_temp() -> DataFrame:
     return df
 
 
+def get_evolution_temp_from_station(station_id: int) -> DataFrame:
+    """
+    Get the evolution of temperature from a specific id
+
+    Parameters
+    ----------
+    station_id : id station
+
+    Returns
+    -------
+    Dataframe containing the data structured (station_id, year, avg_temp)
+    """
+    with get_engine().connect() as con:
+        df = read_sql_query(
+            "SELECT station_id, year, day, AVG(temperature) as avg_temp from Meteo WHERE station_id=? GROUP BY station_id, year, day",
+            con,
+            params=station_id,
+        )
+    return df
+
+
 def get_evolution_wind() -> DataFrame:
     """
     Get the evolution of wind
