@@ -12,3 +12,11 @@
     <img src="/static/charts/{{ chart }}.png" />
   </body>
 </html>
+
+<ul>
+  {% for chart in charts %}
+  <li>
+    <a href="/chart/?chart={{ chart }}" class="racoon">{{chart}}</a>
+  </li>
+  {% endfor %}
+</ul>

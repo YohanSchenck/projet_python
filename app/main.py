@@ -2,7 +2,7 @@ import os
 from typing import List
 
 from data_management.model import Meteo, Station
-from data_management.sql_commands import create_db, insert_data
+from data_management.sql_commands import create_db, insert_data, get_all_stations
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -29,9 +29,10 @@ def get_all_charts() -> List[str]:
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request) -> HTMLResponse:
-    charts = get_all_charts()
+    stations = get_all_stations().to_dict(orient="records")
+    print(stations)
     return templates.TemplateResponse(
-        name="index.html", request=request, context={"charts": charts}
+        name="index.html", request=request, context={"stations": stations}
     )
 
 

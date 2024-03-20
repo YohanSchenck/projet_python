@@ -8,13 +8,20 @@
   </head>
   <body>
     <h1>YFECHOOUPA</h1>
-    <h2>Voici la liste des graphiques disponibles</h2>
-    <ul>
-      {% for chart in charts %}
-      <li>
-        <a href="/chart/?chart={{ chart }}" class="racoon">{{chart}}</a>
-      </li>
+    <h2>Graphique par station</h2>
+    <table>
+      <tr>
+        <th>Station</th>
+        <th>Lien</th>
+      </tr>
+      {% for station in stations %}
+      <tr>
+        <td>{{ station.station_name }}</td>
+        <td>
+          <a href="/station/{{ station.station_id }}"></a>
+        </td>
+      </tr>
       {% endfor %}
-    </ul>
+    </table>
   </body>
 </html>
