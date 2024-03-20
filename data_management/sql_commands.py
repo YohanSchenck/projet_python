@@ -41,8 +41,6 @@ def insert_data(data: List[Station] | List[Meteo]) -> None:
 
     Parameters
     ----------
-    engine : database
-
     data : list of data.
 
     Returns
@@ -137,12 +135,13 @@ def get_evolution_wind(station_id: int) -> DataFrame:
     return df
 
 
-def get_evolution_diff_temperature() -> DataFrame:
+def get_evolution_diff_temperature(station_id: int) -> DataFrame:
     """
     Get the evolution of the temperature difference
 
     Parameters
     ----------
+    station_id : id station
 
     Returns
     -------
@@ -150,7 +149,8 @@ def get_evolution_diff_temperature() -> DataFrame:
     """
     with get_engine().connect() as con:
         df = read_sql_query(
-            "SELECT station_id, year, week, (MAX(temperature) - MIN(temperature)) as difference from Meteo GROUP BY station_id, year, week",
+            "SELECT year, week, MIN(day) as day, (MAX(temperature) - MIN(temperature)) as difference from Meteo WHERE station_id = :station GROUP BY year, week",
             con,
+            params={"station": str(station_id)},
         )
     return df

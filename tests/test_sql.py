@@ -2,8 +2,8 @@ import os
 from typing import List, Union
 
 import pytest
-from app.model import Meteo
-from app.sql_commands import (
+from data_management.model import Meteo
+from data_management.sql_commands import (
     create_db,
     get_evolution_diff_temperature,
     get_evolution_temp,
@@ -71,7 +71,7 @@ def test_insert_data(init_database, create_2_Meteo) -> None:
 
     engine = init_database
 
-    insert_data(engine, data)
+    insert_data(data)
 
     with Session(engine) as session:
         statement = select(Meteo)
@@ -89,34 +89,31 @@ def test_create_database() -> None:
     assert (os.path.isfile("database.db")) is True
 
 
-def test_get_evolution_temp(init_database, create_2_Meteo) -> None:
+def test_get_evolution_temp(create_2_Meteo) -> None:
     data = create_2_Meteo
-    engine = init_database
-    insert_data(engine, data)
+    insert_data(data)
 
-    df = get_evolution_temp(engine)
+    df = get_evolution_temp()
 
     assert (len(df)) == 2
     assert (len(df.columns)) == 3
 
 
-def test_get_evolution_wind(init_database, create_2_Meteo) -> None:
+def test_get_evolution_wind(create_2_Meteo) -> None:
     data = create_2_Meteo
-    engine = init_database
-    insert_data(engine, data)
+    insert_data(data)
 
-    df = get_evolution_wind(engine)
+    df = get_evolution_wind(station_id=102)
 
     assert (len(df)) == 3
     assert (len(df.columns)) == 4
 
 
-def test_get_evolution_diff_temperature(init_database, create_2_Meteo) -> None:
+def test_get_evolution_diff_temperature(create_2_Meteo) -> None:
     data = create_2_Meteo
-    engine = init_database
-    insert_data(engine, data)
+    insert_data(data)
 
-    df = get_evolution_diff_temperature(engine)
+    df = get_evolution_diff_temperature(station_id=102)
 
     assert (len(df)) == 2
     assert (len(df.columns)) == 4
