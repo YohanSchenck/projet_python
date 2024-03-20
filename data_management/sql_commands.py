@@ -90,9 +90,28 @@ def get_evolution_temp_from_station(station_id: int) -> DataFrame:
     """
     with get_engine().connect() as con:
         df = read_sql_query(
-            "SELECT station_id, year, day, AVG(temperature) as avg_temp from Meteo WHERE station_id=? GROUP BY station_id, year, day",
+            "SELECT year, day, AVG(temperature) as avg_temp from Meteo WHERE station_id = :station_id GROUP BY year, day",
             con,
-            params=station_id,
+            params={"station_id": station_id},
+        )
+    return df
+
+
+def get_all_stations() -> DataFrame:
+    """
+    Get all stations
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+    Dataframe containing a list of all stations
+    """
+    with get_engine().connect() as con:
+        df = read_sql_query(
+            "SELECT DISTINCT station_id from Meteo",
+            con,
         )
     return df
 
