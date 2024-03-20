@@ -33,9 +33,9 @@ def create_graph_evol_temp() -> None:
 def create_graph_wind() -> None:
     df = get_evolution_wind()
     wind_force = 4.16
-    df = df[df["avg_wind"] <= wind_force].sort_values(by=["year"])
+    df = df[df["avg_wind"] <= wind_force]
     list_station = df["station_id"].unique()
-
+    list_year = df["year"].unique()
     create_dir("static/charts/evolution_wind/")
 
     for station in list_station:
@@ -43,6 +43,12 @@ def create_graph_wind() -> None:
         df_station = (
             df_station[["year", "avg_wind"]].groupby(["year"], as_index=False).count()
         )
+        for year in list_year:
+            if year not in df_station["year"].unique():
+                df_station.loc[len(df_station.index)] = [year, 0]
+
+        df_station = df_station.sort_values(by=["year"])
+
         df_station.plot(kind="bar", x="year", y="avg_wind", figsize=(20, 10))
         plt.grid()
         plt.gca().legend().remove()
