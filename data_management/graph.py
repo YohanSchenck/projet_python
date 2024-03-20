@@ -26,12 +26,11 @@ def create_graph_evol_temp() -> None:
     list_station = get_all_stations()["station_id"].values
 
     for station in list_station:
-        df_station = get_evolution_temp_from_station(station_id=station).sort_values(
-            by=["year"]
-        )
+        df_station = get_evolution_temp_from_station(station_id=station)
         df_station["date"] = to_datetime(
             df_station["year"] * 1000 + df_station["day"], format="%Y%j"
         )
+        df_station = df_station.sort_values(by=["date"])
         df_station["avg_temp"] = df_station["avg_temp"].rolling(365).mean()
         df_station.plot(kind="line", x="date", y="avg_temp", figsize=(20, 10))
         plt.grid()
@@ -43,15 +42,13 @@ def create_graph_evol_temp() -> None:
 
 def create_graph_wind() -> None:
     os.makedirs("static/charts/evolution_wind/", exist_ok=True)
-
-    df = get_evolution_wind()
     wind_force = 4.16
-    df = df[df["avg_wind"] <= wind_force]
-    list_station = df["station_id"].unique()
-    list_year = df["year"].unique()
+    list_station = get_all_stations()["station_id"].values
 
     for station in list_station:
-        df_station = df[df["station_id"] == station]
+        df_station = get_evolution_wind(station)
+        list_year = df_station["year"].unique()
+        df_station = df_station[df_station["avg_wind"] <= wind_force]
         df_station = (
             df_station[["year", "avg_wind"]].groupby(["year"], as_index=False).count()
         )
