@@ -1,20 +1,27 @@
 import os
 
 import matplotlib.pyplot as plt
-from pandas import to_datetime
+from pandas import DataFrame, to_datetime
 
 from sql_commands import get_evolution_temp, get_evolution_wind
 
 
-def create_dir(path: str):
-    if not os.path.exists(path):
-        os.makedirs(path)
+def create_dir(path: str) -> None:
+    os.makedirs(path, exist_ok=True)
+
+
+def get_top_hottest_year() -> DataFrame:
+    df = get_evolution_temp()
+    df_hottest_year = df[["year", "avg_temp"]].groupby(["year"], as_index=False).mean()
+    df_hottest_year = df_hottest_year.nlargest(10, "avg_temp").sort_values(
+        by=["avg_temp"], ascending=False
+    )
+    return df_hottest_year
 
 
 def create_graph_evol_temp() -> None:
     df = get_evolution_temp()
     df["date"] = to_datetime(df["year"] * 1000 + df["day"], format="%Y%j")
-
     list_station = df["station_id"].unique()
 
     create_dir("static/charts/evolution_temperature/")
@@ -57,4 +64,4 @@ def create_graph_wind() -> None:
 
 
 # create_graph_evol_temp()
-create_graph_wind()
+# create_graph_wind()

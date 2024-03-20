@@ -1,17 +1,13 @@
+import os
 from typing import List
 
-import os
-
-from fastapi import FastAPI, Request
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
+from data_management.model import Meteo
+from data_management.sql_commands import create_db, insert_data
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
-from app.model import Meteo
-
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
-from fastapi import HTTPException
-
-from app.sql_commands import insert_data, create_db
 
 if not os.path.exists("database/database.db"):
     create_db()
