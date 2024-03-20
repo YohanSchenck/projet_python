@@ -3,16 +3,12 @@ import os
 import matplotlib.pyplot as plt
 from pandas import DataFrame, to_datetime
 
-from sql_commands import (
+from data_management.sql_commands import (
     get_all_stations,
     get_evolution_temp,
     get_evolution_temp_from_station,
     get_evolution_wind,
 )
-
-
-def create_dir(path: str) -> None:
-    os.makedirs(path, exist_ok=True)
 
 
 def get_top_hottest_year() -> DataFrame:
@@ -25,9 +21,10 @@ def get_top_hottest_year() -> DataFrame:
 
 
 def create_graph_evol_temp() -> None:
+    os.makedirs("static/charts/evolution_temperature/", exist_ok=True)
+
     list_station = get_all_stations()["station_id"].values
 
-    create_dir("static/charts/evolution_temperature/")
     for station in list_station:
         df_station = get_evolution_temp_from_station(station_id=station).sort_values(
             by=["year"]
@@ -45,12 +42,13 @@ def create_graph_evol_temp() -> None:
 
 
 def create_graph_wind() -> None:
+    os.makedirs("static/charts/evolution_wind/", exist_ok=True)
+
     df = get_evolution_wind()
     wind_force = 4.16
     df = df[df["avg_wind"] <= wind_force]
     list_station = df["station_id"].unique()
     list_year = df["year"].unique()
-    create_dir("static/charts/evolution_wind/")
 
     for station in list_station:
         df_station = df[df["station_id"] == station]

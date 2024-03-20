@@ -4,7 +4,7 @@ from pandas import DataFrame, read_sql_query
 from sqlalchemy import Engine
 from sqlmodel import Session, SQLModel, create_engine
 
-from app.model import Meteo
+from data_management.model import Meteo, Station
 
 
 def get_engine() -> Engine:
@@ -35,7 +35,7 @@ def create_db() -> None:
     SQLModel.metadata.create_all(engine)
 
 
-def insert_data(data: List[Meteo]) -> None:
+def insert_data(data: List[Station] | List[Meteo]) -> None:
     """
     Insert the list of data into the database
 

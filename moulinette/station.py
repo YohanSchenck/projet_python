@@ -5,7 +5,7 @@ STATION_URL = (
 )
 
 
-def get_station_data() -> str:
+def request_station() -> str:
     try:
         data = pd.read_csv(STATION_URL, sep=";")
     except pd.errors.ParserError as error:
@@ -13,4 +13,5 @@ def get_station_data() -> str:
         raise error
     data.rename(columns={"ID": "station_id", "Nom": "station_name"}, inplace=True)
     data.drop(columns=["Latitude", "Longitude", "Altitude"], inplace=True)
+    print(data)
     return data.to_json(orient="records")
