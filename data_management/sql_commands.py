@@ -86,13 +86,13 @@ def get_evolution_temp_from_station(station_id: int) -> DataFrame:
 
     Returns
     -------
-    Dataframe containing the data structured (station_id, year, avg_temp)
+    Dataframe containing the data structured (year, avg_temp)
     """
     with get_engine().connect() as con:
         df = read_sql_query(
-            "SELECT year, day, AVG(temperature) as avg_temp from Meteo WHERE station_id = :station_id GROUP BY year, day",
+            "SELECT year, day, AVG(temperature) as avg_temp from Meteo WHERE station_id = :station GROUP BY year, day",
             con,
-            params={"station_id": station_id},
+            params={"station": str(station_id)},
         )
     return df
 
@@ -110,28 +110,29 @@ def get_all_stations() -> DataFrame:
     """
     with get_engine().connect() as con:
         df = read_sql_query(
-            "SELECT DISTINCT station_id from Meteo",
+            "SELECT station_id, station_name from Station",
             con,
         )
     return df
 
 
-def get_evolution_wind() -> DataFrame:
+def get_evolution_wind(station_id: int) -> DataFrame:
     """
     Get the evolution of wind
 
     Parameters
     ----------
-
+    station_id : id station
 
     Returns
     -------
-    Dataframe containing the data structured (station_id, year,day avg_wind)
+    Dataframe containing the data structured (year,day, avg_wind)
     """
     with get_engine().connect() as con:
         df = read_sql_query(
-            "SELECT station_id, year,day, AVG(wind) as avg_wind from Meteo GROUP BY station_id, year, day",
+            "SELECT year,day, AVG(wind) as avg_wind from Meteo WHERE station_id = :station GROUP BY year, day",
             con,
+            params={"station": str(station_id)},
         )
     return df
 
