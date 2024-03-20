@@ -18,7 +18,7 @@ repos:
     rev: v1.9.0
     hooks:
       - id: mypy
-        args: [--ignore-missing-imports, --exclude=structures.pyi]
+        args: ["--ignore-missing-imports", "--exclude=/tests/"]
         additional_dependencies:
           - "pydantic"
           - "types-requests"

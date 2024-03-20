@@ -29,4 +29,3 @@ if __name__ == "__main__":
         data = request_data(monthly_date)
         processed_data = process_data(data)
         response = upload_data(processed_data)
-        break

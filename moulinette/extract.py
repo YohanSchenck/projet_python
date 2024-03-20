@@ -1,4 +1,4 @@
-import gzip
+from gzip import BadGzipFile
 from datetime import datetime
 
 from typing import Iterator
@@ -28,7 +28,7 @@ def request_data(request_date: str) -> pd.DataFrame:
 
     try:
         data = pd.read_csv(url, sep=";", compression="gzip")
-    except (gzip.BadGzipFile, requests.exceptions.RequestException) as error:
+    except (BadGzipFile, requests.exceptions.RequestException) as error:
         print(f"Error while fetching data for {url}: {error}")
         return
 

@@ -11,6 +11,11 @@ from app.model import Meteo
 from pydantic import ValidationError
 from fastapi import HTTPException
 
+from app.sql_commands import insert_data, create_db
+
+if not os.path.exists("database/database.db"):
+    create_db()
+
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -42,6 +47,7 @@ async def post(meteos: List[Meteo]) -> List[Meteo]:
             item.model_validate(item)
         except ValidationError as exc:
             raise HTTPException(status_code=422, detail=exc.errors()) from exc
+    insert_data(meteos)
     return meteos
 
 
@@ -52,4 +58,13 @@ async def get_chart(
 ) -> HTMLResponse:
     return templates.TemplateResponse(
         name="chart.html", request=request, context={"chart": chart}
+    )
+
+
+@app.get("/station/{station_id}", response_class=HTMLResponse)
+async def get_station(request: Request, station_id: int) -> HTMLResponse:
+    # get all the data for the station
+
+    return templates.TemplateResponse(
+        name="station.html", request=request, context={"station_id": station_id}
     )
