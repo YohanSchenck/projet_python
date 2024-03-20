@@ -14,6 +14,12 @@ def upload_data(data: str) -> requests.Response:
     return requests.post(POST_URL, json=send_data, headers=headers, timeout=60)
 
 
+def upload_station(data: str) -> requests.Response:
+    headers = {"Content-Type": "application/json"}
+    send_data = json.loads(data)
+    return requests.post(POST_URL, json=send_data, headers=headers, timeout=60)
+
+
 def combinatoire(monthly_date: str) -> requests.Response:
     return upload_data(process_data(request_data(monthly_date)))
 
