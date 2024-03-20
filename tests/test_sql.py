@@ -84,7 +84,7 @@ def test_insert_data(init_database, create_2_Meteo) -> None:
 
 def test_create_database() -> None:
     create_db()
-    assert (os.path.isfile("database.db")) is True
+    assert (os.path.isfile("database/database.db")) is True
 
 
 def test_get_evolution_temp(create_2_Meteo) -> None:
