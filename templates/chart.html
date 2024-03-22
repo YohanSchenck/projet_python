@@ -8,15 +8,12 @@
   </head>
   <body>
     <a href="/" class="link-button">Home</a>
-    <h1>{{ chart }}</h1>
-    <img src="/static/charts/{{ chart }}.png" />
+    <h2>{{ title }}</h2>
+
+    {% for chart in charts %}
+    <h2>{{ chart.station_name }}</h2>
+
+    <img src="/static/charts/{{ chart.path }}" />
+    {% endfor %}
   </body>
 </html>
-
-<ul>
-  {% for chart in charts %}
-  <li>
-    <a href="/chart/?chart={{ chart }}" class="racoon">{{chart}}</a>
-  </li>
-  {% endfor %}
-</ul>

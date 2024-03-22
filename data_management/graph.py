@@ -65,5 +65,6 @@ def create_graph_wind() -> None:
         plt.close()
 
 
-create_graph_evol_temp()
-# create_graph_wind()
+if __name__ == "__main__":
+    create_graph_evol_temp()
+    create_graph_wind()

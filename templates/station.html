@@ -8,7 +8,10 @@
   </head>
   <body>
     <a href="/" class="link-button">Home</a>
-    <h1>{{ chart }}</h1>
-    <img src="/static/charts/{{ chart }}.png" />
+    <h1>{{ station_name }}</h1>
+    {% for chart in charts %}
+    <h2>{{ chart.title }}</h2>
+    <img src="/static/charts/{{ chart.path }}" />
+    {% endfor %}
   </body>
 </html>

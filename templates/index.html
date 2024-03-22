@@ -12,16 +12,26 @@
     <table>
       <tr>
         <th>Station</th>
-        <th>Lien</th>
       </tr>
       {% for station in stations %}
       <tr>
-        <td>{{ station.station_name }}</td>
         <td>
-          <a href="/station/{{ station.station_id }}"></a>
+          <a href="/station/{{ station.station_id }}"
+            >{{ station.station_name }}</a
+          >
         </td>
       </tr>
       {% endfor %}
     </table>
+    <h2>
+      <a href="/chart/evolution_temperature"
+        >Graphique de l'évolution des températures de chaque station</a
+      >
+    </h2>
+    <h2>
+      <a href="/chart/evolution_wind"
+        >Nombre de jours où les éoliennes n'ont pas pu fonctionner</a
+      >
+    </h2>
   </body>
 </html>

@@ -1,13 +1,18 @@
-import os
 from typing import List
 
 from data_management.model import Meteo, Station
-from data_management.sql_commands import create_db, insert_data, get_all_stations
+from data_management.sql_commands import (
+    create_db,
+    insert_data,
+    get_all_stations,
+    get_station_name,
+)
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
+from app.functions import LIST_OF_GRAPH, get_all_charts_from_station, get_all_charts
 
 create_db()
 
@@ -16,15 +21,6 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
-
-
-def get_all_charts() -> List[str]:
-    charts = []
-    for file in os.listdir("static/charts/"):
-        if file.endswith(".gif") or file.endswith(".png") or file.endswith(".jpg"):
-            filename = file.split(".")[0]
-            charts.append(filename)
-    return charts
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -58,20 +54,27 @@ async def post_station(stations: List[Station]) -> List[Station]:
     return stations
 
 
-@app.get("/chart/", response_class=HTMLResponse)
+@app.get("/chart/{chart}", response_class=HTMLResponse)
 async def get_chart(
     request: Request,
-    chart: str = "temperature",
+    chart: str,
 ) -> HTMLResponse:
+    charts = get_all_charts(chart)
+    title = LIST_OF_GRAPH[chart]["title"]
     return templates.TemplateResponse(
-        name="chart.html", request=request, context={"chart": chart}
+        name="chart.html", request=request, context={"charts": charts, "title": title}
     )
 
 
 @app.get("/station/{station_id}", response_class=HTMLResponse)
 async def get_station(request: Request, station_id: int) -> HTMLResponse:
     # get all the data for the station
-
+    print(station_id)
+    charts = get_all_charts_from_station(station_id)
+    station_name = get_station_name(station_id)
+    print(charts)
     return templates.TemplateResponse(
-        name="station.html", request=request, context={"station_id": station_id}
+        name="station.html",
+        request=request,
+        context={"charts": charts, "station_name": station_name},
     )
