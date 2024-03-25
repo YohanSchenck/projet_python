@@ -189,3 +189,33 @@ def get_top_hottest_year(engine: Engine, station: int) -> DataFrame:
     )
     df_hottest_year["avg_temp"] = df_hottest_year["avg_temp"].round(3)
     return df_hottest_year
+
+
+def verify_availibity_meteo(year: str, month: str, engine: Engine) -> None:
+    """
+    Verify if the month given is saved in the database
+
+    Parameters
+    ----------
+    engine : engine database
+
+    year : year to verify
+
+    month : month to verify
+
+    Returns
+    -------
+    """
+    with engine.connect() as con:
+        df = read_sql_query(
+            "SELECT COUNT(year) as occurence from Meteo WHERE year = :year AND month = :month",
+            con,
+            params={"year": year, "month": month},
+        )
+    if df["occurence"].values[0] == 0:
+        return False
+    else:
+        return True
+
+
+print(verify_availibity_meteo("2026", "1", get_engine()))
