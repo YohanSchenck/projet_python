@@ -11,12 +11,14 @@
   <div class="station-select-container">
     <label for="station-select">Graphique par station :</label>
     <select name="stations" id="station-select" onchange="location = this.value;">
+      <option value="" disabled selected>Choisir</option>
       {% for station in stations %}
         <option value="/station/{{ station.station_id }}">
           {{ station.station_name }}
         </option>
       {% endfor %}
     </select>
+
   </div>
 
   <h2>
