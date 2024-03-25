@@ -36,7 +36,7 @@ async def root(request: Request) -> HTMLResponse:
     )
 
 
-@APP.post("/upload/")
+@APP.post("/upload_meteo/")
 async def post(meteos: List[Meteo]) -> List[Meteo]:
     for item in meteos:
         try:
