@@ -22,7 +22,7 @@ def get_engine(path: str = "database/database.db") -> Engine:
     return create_engine(f"sqlite:///{path}", echo=True)
 
 
-def create_db() -> None:
+def create_db() -> Engine:
     """
     Create Database
 
@@ -31,9 +31,11 @@ def create_db() -> None:
 
     Returns
     -------
+    Engine : database engine with tables created
     """
     engine = get_engine()
     SQLModel.metadata.create_all(engine)
+    return engine
 
 
 def insert_data(data: List[Station] | List[Meteo], engine: Engine) -> None:

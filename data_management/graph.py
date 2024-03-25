@@ -2,6 +2,7 @@ import os
 
 import matplotlib.pyplot as plt
 from pandas import DataFrame, to_datetime
+from sqlalchemy import Engine
 
 from data_management.sql_commands import (
     get_all_stations,
@@ -12,7 +13,7 @@ from data_management.sql_commands import (
 )
 
 
-def get_top_hottest_year() -> DataFrame:
+def get_top_hottest_year(engine: Engine) -> DataFrame:
     """
     Get the top 10 hottest year
 
@@ -23,7 +24,7 @@ def get_top_hottest_year() -> DataFrame:
     -------
     Dataframe containing the data structured (year,avg_temp)
     """
-    df = get_evolution_temp()
+    df = get_evolution_temp(engine=engine)
     df_hottest_year = df[["year", "avg_temp"]].groupby(["year"], as_index=False).mean()
     df_hottest_year = df_hottest_year.nlargest(10, "avg_temp").sort_values(
         by=["avg_temp"], ascending=False
@@ -31,12 +32,13 @@ def get_top_hottest_year() -> DataFrame:
     return df_hottest_year
 
 
-def create_graph_evol_temp() -> None:
+def create_graph_evol_temp(engine: Engine) -> None:
     """
     Create all graphs observing the evolution of temperature
 
     Parameters
     ----------
+    engine : engine database
 
     Returns
     -------
@@ -44,10 +46,10 @@ def create_graph_evol_temp() -> None:
 
     os.makedirs("static/charts/evolution_temperature/", exist_ok=True)
 
-    list_station = get_all_stations()["station_id"].values
+    list_station = get_all_stations(engine=engine)["station_id"].values
 
     for station in list_station:
-        df_station = get_evolution_temp_from_station(station_id=station)
+        df_station = get_evolution_temp_from_station(station_id=station, engine=engine)
         df_station["date"] = to_datetime(
             df_station["year"] * 1000 + df_station["day"], format="%Y%j"
         )
@@ -61,22 +63,23 @@ def create_graph_evol_temp() -> None:
         plt.close()
 
 
-def create_graph_wind() -> None:
+def create_graph_wind(engine: Engine) -> None:
     """
     Create all graphs observing the number of days where the wind turbine can't work
 
     Parameters
     ----------
+    engine : engine database
 
     Returns
     -------
     """
     os.makedirs("static/charts/evolution_wind/", exist_ok=True)
     wind_force = 4.16
-    list_station = get_all_stations()["station_id"].values
+    list_station = get_all_stations(engine=engine)["station_id"].values
 
     for station in list_station:
-        df_station = get_evolution_wind(station)
+        df_station = get_evolution_wind(station, engine=engine)
         list_year = df_station["year"].unique()
         df_station = df_station[df_station["avg_wind"] <= wind_force]
         df_station = (
@@ -95,12 +98,13 @@ def create_graph_wind() -> None:
         plt.close()
 
 
-def create_graph_temp_diff() -> None:
+def create_graph_temp_diff(engine: Engine) -> None:
     """
     Create all graphs observing the difference of temperature between 1996 and today
 
     Parameters
     ----------
+    engine : engine database
 
     Returns
     -------
@@ -108,10 +112,10 @@ def create_graph_temp_diff() -> None:
 
     os.makedirs("static/charts/difference_temperature/", exist_ok=True)
 
-    list_station = get_all_stations()["station_id"].values
+    list_station = get_all_stations(engine)["station_id"].values
 
     for station in list_station:
-        df_station = get_evolution_diff_temperature(station_id=station)
+        df_station = get_evolution_diff_temperature(station_id=station, engine=engine)
         df_station["date"] = to_datetime(
             df_station["year"] * 1000 + df_station["day"], format="%Y%j"
         )
