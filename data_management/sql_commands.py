@@ -149,7 +149,7 @@ def get_evolution_diff_temperature(station_id: int, engine: Engine) -> DataFrame
     return df
 
 
-def get_station_name(station_id: int) -> str:
+def get_station_name(station_id: int, engine: Engine) -> str:
     """
     Get the name of the station
 
@@ -161,7 +161,7 @@ def get_station_name(station_id: int) -> str:
     -------
     Name of the station
     """
-    with get_engine().connect() as con:
+    with engine.connect() as con:
         df = read_sql_query(
             "SELECT station_name from Station WHERE station_id = :station",
             con,
