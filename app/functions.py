@@ -54,14 +54,12 @@ def get_all_charts(chart: str) -> List[Dict[str, str]]:
     stations = get_all_stations()
     charts = []
     for station in stations.to_dict(orient="records"):
-        path = f"static/charts/{chart}/{station['station_id']}.png"
-        if os.path.exists(path):
+        if os.path.exists(f"static/charts/{chart}/{station['station_id']}.png"):
             charts.append(
                 {
                     "station_name": station["station_name"],
                     "path": f"{chart}/{station['station_id']}.png",
                 }
             )
-    # list all the files in the directory
 
     return charts
