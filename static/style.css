@@ -66,6 +66,35 @@ h2 a:hover {
   text-decoration: underline;
 }
 
+.hotspot {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.hotspot label,
+.hotspot select {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  color: #3498db;
+  background-color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.hotspot select:hover {
+  background-color: #3498db;
+  color: #ffffff;
+}
+
 .station-select-container {
   font-family: Arial, sans-serif;
   padding: 20px;
