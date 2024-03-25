@@ -70,3 +70,21 @@ def test_invalid_upload() -> None:
     ]
     response = client.post("/upload_meteo/", json=meteos)
     assert response.status_code == 422
+
+
+def test_chart() -> None:
+    """Test the chart endpoint."""
+    response = client.get("/chart/difference_temperature")
+    assert response.status_code == 200
+
+
+def test_station() -> None:
+    """Test the station endpoint."""
+    response = client.get("/station/07510")
+    assert response.status_code == 200
+
+
+def test_top_hottest_year() -> None:
+    """Test the top hottest year endpoint."""
+    response = client.get("/top_hottest_year/07510")
+    assert response.status_code == 200

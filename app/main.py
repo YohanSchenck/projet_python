@@ -18,6 +18,13 @@ from app.functions import (
     get_all_charts_from_station,
     get_all_charts,
 )
+from moulinette.extract import monthly_dates_generator, request_meteo, process_meteo
+from moulinette.upload import upload_meteo
+from data_management.graph import (
+    create_graph_evol_temp,
+    create_graph_wind,
+    create_graph_temp_diff,
+)
 
 ENGINE = create_db()
 
@@ -75,7 +82,7 @@ async def get_chart(
 async def get_station(request: Request, station_id: int) -> HTMLResponse:
     # get all the data for the station
     charts = get_all_charts_from_station(station_id)
-    station_name = get_station_name(station_id)
+    station_name = get_station_name(station_id, ENGINE)
     return TEMPLATES.TemplateResponse(
         name="station.html",
         request=request,
@@ -86,9 +93,34 @@ async def get_station(request: Request, station_id: int) -> HTMLResponse:
 @APP.get("/top_hottest_year/{station_id}", response_class=HTMLResponse)
 async def get_top_year(request: Request, station_id: int) -> HTMLResponse:
     years = get_top_hottest_year(ENGINE, station_id).to_dict(orient="records")
-    station_name = get_station_name(station_id)
+    station_name = get_station_name(station_id, ENGINE)
     return TEMPLATES.TemplateResponse(
         name="top_year.html",
         request=request,
         context={"years": years, "station_name": station_name},
     )
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    new_data = False
+    uvicorn.run(APP, host="localhost", port=8000)
+
+    for monthly_date in monthly_dates_generator():
+        print(f"Processing data for {monthly_date} ...")
+        year = monthly_date[:4]
+        month = monthly_date[4:]
+        if True:
+            new_data = True
+            data = request_meteo(monthly_date)
+            processed_data = process_meteo(data)
+            response = upload_meteo(processed_data)
+
+    if new_data:
+        print("New data has been uploaded")
+        print("Generating charts ...")
+        create_graph_evol_temp(ENGINE)
+        create_graph_wind(ENGINE)
+        create_graph_temp_diff(ENGINE)
+        print("Charts have been generated")
