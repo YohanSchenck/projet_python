@@ -1,8 +1,9 @@
-from unittest.mock import patch, MagicMock
-from moulinette.extract import monthly_dates_generator, request_data, process_data
-import pandas as pd
 import gzip
+from unittest.mock import MagicMock, patch
+
+import pandas as pd
 import requests
+from moulinette.extract import monthly_dates_generator, process_meteo, request_meteo
 
 
 def test_monthly_dates_generator_change_year() -> None:
@@ -18,18 +19,18 @@ def test_request_data_success() -> None:
     with patch("pandas.read_csv") as mock_read_csv:
         mock_df = MagicMock(spec=pd.DataFrame)
         mock_read_csv.return_value = mock_df
-        df = request_data("202001")
+        df = request_meteo("202001")
         assert df is mock_df
 
 
 def test_request_data_exceptions() -> None:
     with patch("pandas.read_csv") as mock_read_csv:
         mock_read_csv.side_effect = requests.exceptions.RequestException
-        df = request_data("202001")
+        df = request_meteo("202001")
         assert df is None
 
         mock_read_csv.side_effect = gzip.BadGzipFile
-        df = request_data("202001")
+        df = request_meteo("202001")
         assert df is None
 
 
@@ -41,7 +42,7 @@ def test_process_data_column_renaming() -> None:
         "date": ["20200101120000"],
     }
     test_df = pd.DataFrame(raw_data)
-    processed_json = process_data(test_df)
+    processed_json = process_meteo(test_df)
     processed_df = pd.read_json(processed_json)
 
     expected_columns = [
@@ -67,7 +68,7 @@ def test_process_data_temperature_conversion() -> None:
         "date": ["20200101120000"],
     }
     test_df = pd.DataFrame(raw_data)
-    processed_json = process_data(test_df)
+    processed_json = process_meteo(test_df)
     processed_df = pd.read_json(processed_json)
 
     assert (
@@ -83,7 +84,7 @@ def test_process_data_dropna() -> None:
         "date": ["20200101120000", None],
     }
     test_df = pd.DataFrame(raw_data)
-    processed_json = process_data(test_df)
+    processed_json = process_meteo(test_df)
     processed_df = pd.read_json(processed_json)
 
     assert processed_df.isnull().sum().sum() == 0, "All NaN values should be dropped."

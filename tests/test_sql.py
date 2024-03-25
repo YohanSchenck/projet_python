@@ -1,30 +1,30 @@
 import os
-from typing import List, Union
+from typing import List
 
 import pytest
-from app.model import Meteo
-from app.sql_commands import (
+from data_management.model import Meteo
+from data_management.sql_commands import (
     create_db,
+    get_engine,
     get_evolution_diff_temperature,
     get_evolution_temp,
     get_evolution_wind,
     insert_data,
 )
 from sqlalchemy import Engine
-from sqlmodel import Session, SQLModel, create_engine, select
-
-Fixture = Union
+from sqlmodel import Session, SQLModel, select
 
 
 @pytest.fixture
 def init_database() -> Engine:
-    engine = create_engine("sqlite:///:memory:", echo=True)
+    path: str = ":memory:"
+    engine = get_engine(path)
     SQLModel.metadata.create_all(engine)
     return engine
 
 
 @pytest.fixture
-def create_2_Meteo() -> List[Meteo]:
+def create_3_Meteo() -> List[Meteo]:
     data: List[Meteo] = []
 
     meteo1 = Meteo(
@@ -66,12 +66,12 @@ def create_2_Meteo() -> List[Meteo]:
     return data
 
 
-def test_insert_data(init_database, create_2_Meteo) -> None:
-    data = create_2_Meteo
+def test_insert_data(init_database, create_3_Meteo) -> None:
+    data = create_3_Meteo
 
     engine = init_database
 
-    insert_data(engine, data)
+    insert_data(data, engine=engine)
 
     with Session(engine) as session:
         statement = select(Meteo)
@@ -86,37 +86,37 @@ def test_insert_data(init_database, create_2_Meteo) -> None:
 
 def test_create_database() -> None:
     create_db()
-    assert (os.path.isfile("database.db")) is True
+    assert (os.path.isfile("database/database.db")) is True
 
 
-def test_get_evolution_temp(init_database, create_2_Meteo) -> None:
-    data = create_2_Meteo
+def test_get_evolution_temp(init_database, create_3_Meteo) -> None:
+    data = create_3_Meteo
     engine = init_database
-    insert_data(engine, data)
+    insert_data(data, engine)
 
     df = get_evolution_temp(engine)
-
-    assert (len(df)) == 2
-    assert (len(df.columns)) == 3
-
-
-def test_get_evolution_wind(init_database, create_2_Meteo) -> None:
-    data = create_2_Meteo
-    engine = init_database
-    insert_data(engine, data)
-
-    df = get_evolution_wind(engine)
 
     assert (len(df)) == 3
     assert (len(df.columns)) == 4
 
 
-def test_get_evolution_diff_temperature(init_database, create_2_Meteo) -> None:
-    data = create_2_Meteo
+def test_get_evolution_wind(init_database, create_3_Meteo) -> None:
+    data = create_3_Meteo
     engine = init_database
-    insert_data(engine, data)
+    insert_data(data, engine)
 
-    df = get_evolution_diff_temperature(engine)
+    df = get_evolution_wind(station_id=102, engine=engine)
+
+    assert (len(df)) == 3
+    assert (len(df.columns)) == 3
+
+
+def test_get_evolution_diff_temperature(init_database, create_3_Meteo) -> None:
+    data = create_3_Meteo
+    engine = init_database
+    insert_data(data, engine)
+
+    df = get_evolution_diff_temperature(station_id=102, engine=engine)
 
     assert (len(df)) == 2
     assert (len(df.columns)) == 4

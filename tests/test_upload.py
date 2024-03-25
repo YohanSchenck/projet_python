@@ -1,5 +1,6 @@
-from moulinette.upload import upload_data
 import json
+
+from moulinette.upload import upload_meteo
 
 
 def test_upload_data():
@@ -17,7 +18,7 @@ def test_upload_data():
         }
     ]
     data = json.dumps(meteos)
-    response = upload_data(data)
+    response = upload_meteo(data)
     assert (
         response.status_code == 200
     ), f"Expected 200 OK, got {response.status_code}: {response.text}"
