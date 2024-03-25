@@ -1,35 +1,15 @@
 import os
 
 import matplotlib.pyplot as plt
-from pandas import DataFrame, to_datetime
+from pandas import to_datetime
 from sqlalchemy import Engine
 
 from data_management.sql_commands import (
     get_all_stations,
     get_evolution_diff_temperature,
-    get_evolution_temp,
     get_evolution_temp_from_station,
     get_evolution_wind,
 )
-
-
-def get_top_hottest_year(engine: Engine) -> DataFrame:
-    """
-    Get the top 10 hottest year
-
-    Parameters
-    ----------
-
-    Returns
-    -------
-    Dataframe containing the data structured (year,avg_temp)
-    """
-    df = get_evolution_temp(engine=engine)
-    df_hottest_year = df[["year", "avg_temp"]].groupby(["year"], as_index=False).mean()
-    df_hottest_year = df_hottest_year.nlargest(10, "avg_temp").sort_values(
-        by=["avg_temp"], ascending=False
-    )
-    return df_hottest_year
 
 
 def create_graph_evol_temp(engine: Engine) -> None:
@@ -130,4 +110,9 @@ def create_graph_temp_diff(engine: Engine) -> None:
 
 # create_graph_evol_temp()
 # create_graph_wind()
-# create_graph_temp_diff()
+if __name__ == "__main__":
+    from data_management.sql_commands import get_engine
+
+    engine = get_engine()
+    # get_top_hottest_year(engine,7117)
+    # create_graph_temp_diff(engine)

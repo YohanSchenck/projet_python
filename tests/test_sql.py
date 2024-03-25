@@ -7,7 +7,6 @@ from data_management.sql_commands import (
     create_db,
     get_engine,
     get_evolution_diff_temperature,
-    get_evolution_temp,
     get_evolution_wind,
     insert_data,
 )
@@ -87,17 +86,6 @@ def test_insert_data(init_database, create_3_Meteo) -> None:
 def test_create_database() -> None:
     create_db()
     assert (os.path.isfile("database/database.db")) is True
-
-
-def test_get_evolution_temp(init_database, create_3_Meteo) -> None:
-    data = create_3_Meteo
-    engine = init_database
-    insert_data(data, engine)
-
-    df = get_evolution_temp(engine)
-
-    assert (len(df)) == 3
-    assert (len(df.columns)) == 4
 
 
 def test_get_evolution_wind(init_database, create_3_Meteo) -> None:

@@ -3,7 +3,7 @@
 Commande pour lancer le serveur
 
 ```
-uvicorn app.main:app --reload
+uvicorn app.main:APP --reload
 ```
 
 ```bash

@@ -19,7 +19,7 @@ def get_engine(path: str = "database/database.db") -> Engine:
     -------
     Engine : database engine
     """
-    return create_engine(f"sqlite:///{path}", echo=True)
+    return create_engine(f"sqlite:///{path}")
 
 
 def create_db() -> Engine:
@@ -57,27 +57,6 @@ def insert_data(data: List[Station] | List[Meteo], engine: Engine) -> None:
             session.add(row)
 
         session.commit()
-
-
-def get_evolution_temp(engine: Engine) -> DataFrame:
-    """
-    Get the evolution of temperature
-
-    Parameters
-    ----------
-
-    path : Path of database has to be defined in case of test
-
-    Returns
-    -------
-    Dataframe containing the data structured (station_id, year, avg_temp)
-    """
-    with engine.connect() as con:
-        df = read_sql_query(
-            "SELECT station_id, year, day, AVG(temperature) as avg_temp from Meteo GROUP BY station_id, year, day",
-            con,
-        )
-    return df
 
 
 def get_evolution_temp_from_station(station_id: int, engine: Engine) -> DataFrame:
@@ -189,3 +168,24 @@ def get_station_name(station_id: int) -> str:
             params={"station": str(station_id)},
         )
     return df["station_name"].values[0]
+
+
+def get_top_hottest_year(engine: Engine, station: int) -> DataFrame:
+    """
+    Get the top 10 hottest year
+
+    Parameters
+    ----------
+    engine : engine database
+
+    Returns
+    -------
+    Dataframe containing the data structured (year,avg_temp)
+    """
+    df = get_evolution_temp_from_station(station, engine=engine)
+    df_hottest_year = df[["year", "avg_temp"]].groupby(["year"], as_index=False).mean()
+    df_hottest_year = df_hottest_year.nlargest(10, "avg_temp").sort_values(
+        by=["avg_temp"], ascending=False
+    )
+    df_hottest_year["avg_temp"] = df_hottest_year["avg_temp"].round(3)
+    return df_hottest_year

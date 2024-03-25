@@ -6,10 +6,9 @@ from data_management.graph import (
     create_graph_evol_temp,
     create_graph_temp_diff,
     create_graph_wind,
-    get_top_hottest_year,
 )
 from data_management.model import Meteo, Station
-from data_management.sql_commands import get_engine, insert_data
+from data_management.sql_commands import get_engine, insert_data, get_top_hottest_year
 from sqlalchemy import Engine
 from sqlmodel import SQLModel
 
@@ -143,7 +142,7 @@ def test_create_get_top_hottest_year(init_database, create_3_Meteo) -> None:
 
     insert_data(meteos, engine=engine)
 
-    df = get_top_hottest_year(engine)
+    df = get_top_hottest_year(engine, 102)
 
-    assert (len(df)) == 2
+    assert (len(df)) == 1
     assert (len(df.columns)) == 2

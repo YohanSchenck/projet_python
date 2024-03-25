@@ -1,33 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/static/style.css" />
-  <title>Document</title>
-</head>
-<body>
-  <h1>YFECHOOUPA</h1>
-  <div class="station-select-container">
-    <label for="station-select">Graphique par station :</label>
-    <select name="stations" id="station-select" onchange="location = this.value;">
-      {% for station in stations %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>YFECHOOUPA</h1>
+    <div class="station-select-container">
+      <label for="station-select">Graphique par station :</label>
+      <select
+        name="stations"
+        id="station-select"
+        onchange="location = this.value;"
+      >
+        {% for station in stations %}
         <option value="/station/{{ station.station_id }}">
           {{ station.station_name }}
         </option>
-      {% endfor %}
-    </select>
-  </div>
-
-  <h2>
-    <a href="/chart/evolution_temperature">
-      Graphique de l'évolution des températures de chaque station
-    </a>
-  </h2>
-  <h2>
-    <a href="/chart/evolution_wind">
-      Nombre de jours où les léoliennes n'ont pas pu fonctionner
-    </a>
-  </h2>
-</body>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="station-select-container">
+      <label for="station-select">Années les plus chaudes par station :</label>
+      <select
+        name="stations"
+        id="station-select"
+        onchange="location = this.value;"
+      >
+        {% for station in stations %}
+        <option value="/top_hottest_year/{{ station.station_id }}">
+          {{ station.station_name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <h2>
+      <a href="/chart/evolution_temperature">
+        Graphique de l'évolution des températures de chaque station
+      </a>
+    </h2>
+    <h2>
+      <a href="/chart/evolution_wind">
+        Nombre de jours où les léoliennes n'ont pas pu fonctionner
+      </a>
+    </h2>
+    <h2>
+      <a href="/chart/difference_temperature">
+        Ecart maximum de température dans une semaine
+      </a>
+    </h2>
+  </body>
 </html>
