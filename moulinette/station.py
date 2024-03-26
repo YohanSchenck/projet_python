@@ -13,5 +13,4 @@ def request_station(STATION_URL: str) -> str:
         raise error
     data.rename(columns={"ID": "station_id", "Nom": "station_name"}, inplace=True)
     data.drop(columns=["Latitude", "Longitude", "Altitude"], inplace=True)
-    print(data)
     return data.to_json(orient="records")

@@ -9,6 +9,8 @@ from data_management.sql_commands import (
     get_station_name,
     get_top_hottest_year,
     get_unique_dates,
+    verify_station,
+    clear_station_table,
 )
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
@@ -21,12 +23,13 @@ from app.functions import (
     get_all_charts,
 )
 from moulinette.extract import monthly_dates_generator, request_meteo, process_meteo
-from moulinette.upload import upload_meteo
+from moulinette.upload import upload_meteo, upload_station
 from data_management.graph import (
     create_graph_evol_temp,
     create_graph_wind,
     create_graph_temp_diff,
 )
+from moulinette.station import request_station, STATION_URL
 
 ENGINE = create_db()
 
@@ -82,7 +85,6 @@ async def get_chart(
 
 @APP.get("/station/{station_id}", response_class=HTMLResponse)
 async def get_station(request: Request, station_id: int) -> HTMLResponse:
-    # get all the data for the station
     charts = get_all_charts_from_station(station_id)
     station_name = get_station_name(station_id, ENGINE)
     return TEMPLATES.TemplateResponse(
@@ -115,6 +117,12 @@ if __name__ == "__main__":
         kwargs={"host": host, "port": port},
     )
     webapp_thread.start()
+    if not verify_station(ENGINE):
+        print("Station data is missing")
+        print("Uploading station data ...")
+        clear_station_table(ENGINE)
+        upload_station(request_station(STATION_URL))
+
     dates = set(get_unique_dates(ENGINE)["date"])
     for monthly_date in monthly_dates_generator():
         print(f"Processing data for {monthly_date} ...")

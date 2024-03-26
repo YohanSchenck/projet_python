@@ -2,7 +2,7 @@ from typing import List
 
 from pandas import DataFrame, read_sql_query
 from sqlalchemy import Engine
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import Session, SQLModel, create_engine, delete
 
 from data_management.model import Meteo, Station
 
@@ -201,6 +201,7 @@ def get_unique_dates(engine: Engine) -> DataFrame:
 
     Returns
     -------
+    A dataframe with all unique dates to format YYYYMM
     """
     with engine.connect() as con:
         df = read_sql_query(
@@ -208,3 +209,40 @@ def get_unique_dates(engine: Engine) -> DataFrame:
             con,
         )
     return df
+
+
+def verify_station(engine: Engine) -> bool:
+    """
+    Verify if the table station is not empty
+
+    Parameters
+    ----------
+    engine : engine database
+
+    Returns
+    -------
+    A boolean if the table is empty or not
+    """
+    with engine.connect() as con:
+        df = read_sql_query(
+            "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END AS station_exists FROM station;",
+            con,
+        )
+    return bool(df["station_exists"].values[0])
+
+
+def clear_station_table(engine: Engine) -> None:
+    """
+    Clear table station
+
+    Parameters
+    ----------
+    engine : engine database
+
+    Returns
+    -------
+    """
+    with Session(engine) as session:
+        statement = delete(Station)
+        session.exec(statement)
+        session.commit()
