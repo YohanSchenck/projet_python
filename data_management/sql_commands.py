@@ -149,7 +149,7 @@ def get_evolution_diff_temperature(station_id: int, engine: Engine) -> DataFrame
     return df
 
 
-def get_station_name(station_id: int) -> str:
+def get_station_name(station_id: int, engine: Engine) -> str:
     """
     Get the name of the station
 
@@ -161,7 +161,7 @@ def get_station_name(station_id: int) -> str:
     -------
     Name of the station
     """
-    with get_engine().connect() as con:
+    with engine.connect() as con:
         df = read_sql_query(
             "SELECT station_name from Station WHERE station_id = :station",
             con,
@@ -189,3 +189,22 @@ def get_top_hottest_year(engine: Engine, station: int) -> DataFrame:
     )
     df_hottest_year["avg_temp"] = df_hottest_year["avg_temp"].round(3)
     return df_hottest_year
+
+
+def get_unique_dates(engine: Engine) -> DataFrame:
+    """
+    Get all unique date
+
+    Parameters
+    ----------
+    engine : engine database
+
+    Returns
+    -------
+    """
+    with engine.connect() as con:
+        df = read_sql_query(
+            "SELECT DISTINCT year|| printf('%02d', month) AS date FROM meteo;",
+            con,
+        )
+    return df

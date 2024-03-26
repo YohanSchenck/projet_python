@@ -10,36 +10,81 @@ def test_read_main() -> None:
     assert response.status_code == 200
 
 
-def test_valid_upload() -> None:
+def test_valid_upload_station() -> None:
+    """Test the upload endpoint."""
+    stations = [
+        {
+            "station_id": 1,
+            "station_name": "test",
+        }
+    ]
+
+    response = client.post("/upload_station/", json=stations)
+    assert response.status_code == 200
+
+
+def test_invalid_upload_station() -> None:
+    """Test the upload endpoint."""
+    stations = [
+        {
+            "station_id": 1,
+            "station_name": 1,
+        }
+    ]
+
+    response = client.post("/upload_station/", json=stations)
+    assert response.status_code == 422
+
+
+def test_valid_upload_meteo() -> None:
     """Test the upload endpoint."""
     meteos = [
         {
-            "id": None,
-            "station_id": 1,
-            "year": 2021,
+            "station_id": 89642,
+            "year": 2000,
             "month": 1,
-            "week": 1,
-            "day": 1,
-            "hour": 0,
-            "wind": 1.0,
-            "temperature": 1.0,
+            "week": 5,
+            "day": 31,
+            "hour": 21,
+            "temperature": -8.0,
+            "wind": 9.7,
         }
     ]
-    response = client.post("/upload/", json=meteos)
+    response = client.post("/upload_meteo/", json=meteos)
     assert response.status_code == 200
-    print(response.json())
-    assert response.json() == meteos
 
 
 def test_invalid_upload() -> None:
     """Test the upload endpoint."""
     meteos = [
         {
-            "station_id": "bojlz",
-            "date": "2021-01-01T00:00:00",
-            "wind": "bonjour",
-            "temperature": 1.0,
+            "station_id": "bjodokz",
+            "year": 2000,
+            "month": 1,
+            "week": 5,
+            "day": 31,
+            "hour": 21,
+            "temperature": -8.0,
+            "wind": 9.7,
         }
     ]
-    response = client.post("/upload/", json=meteos)
+    response = client.post("/upload_meteo/", json=meteos)
     assert response.status_code == 422
+
+
+def test_chart() -> None:
+    """Test the chart endpoint."""
+    response = client.get("/chart/difference_temperature")
+    assert response.status_code == 200
+
+
+def test_station() -> None:
+    """Test the station endpoint."""
+    response = client.get("/station/07510")
+    assert response.status_code == 200
+
+
+def test_top_hottest_year() -> None:
+    """Test the top hottest year endpoint."""
+    response = client.get("/top_hottest_year/07510")
+    assert response.status_code == 200

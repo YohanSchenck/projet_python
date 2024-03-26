@@ -2,12 +2,14 @@ import os
 from typing import List
 
 import pytest
-from data_management.model import Meteo
+from data_management.model import Meteo, Station
 from data_management.sql_commands import (
     create_db,
     get_engine,
     get_evolution_diff_temperature,
     get_evolution_wind,
+    get_station_name,
+    get_unique_dates,
     insert_data,
 )
 from sqlalchemy import Engine
@@ -65,6 +67,19 @@ def create_3_Meteo() -> List[Meteo]:
     return data
 
 
+@pytest.fixture
+def create_2_Station() -> List[Station]:
+    data: List[Station] = []
+
+    station1 = Station(station_id=102, station_name="Bordeaux")
+
+    station2 = Station(station_id=103, station_name="Paris")
+
+    data.append(station1)
+    data.append(station2)
+    return data
+
+
 def test_insert_data(init_database, create_3_Meteo) -> None:
     data = create_3_Meteo
 
@@ -108,3 +123,22 @@ def test_get_evolution_diff_temperature(init_database, create_3_Meteo) -> None:
 
     assert (len(df)) == 2
     assert (len(df.columns)) == 4
+
+
+def test_get_station_name(init_database, create_2_Station):
+    data = create_2_Station
+    engine = init_database
+    insert_data(data, engine)
+
+    assert (get_station_name(102, engine)) == "Bordeaux"
+
+
+def test_get_unique_dates(init_database, create_3_Meteo) -> None:
+    data = create_3_Meteo
+    engine = init_database
+    insert_data(data, engine)
+    df = get_unique_dates(engine=engine)
+
+    assert (len(df)) == 2
+    assert (df["date"][0]) == "202401"
+    assert (df["date"][1]) == "202301"

@@ -3,7 +3,7 @@ import json
 
 from moulinette.station import request_station, STATION_URL
 
-POST_URL_METEO = "http://localhost:8000/upload/"
+POST_URL_METEO = "http://localhost:8000/upload_meteo/"
 POST_URL_STATION = "http://localhost:8000/upload_station/"
 
 
