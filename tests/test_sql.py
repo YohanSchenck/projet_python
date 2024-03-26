@@ -4,7 +4,9 @@ from typing import List
 import pytest
 from data_management.model import Meteo, Station
 from data_management.sql_commands import (
+    clear_station_table,
     create_db,
+    get_all_stations,
     get_engine,
     get_evolution_diff_temperature,
     get_evolution_wind,
@@ -142,3 +144,26 @@ def test_get_unique_dates(init_database, create_3_Meteo) -> None:
     assert (len(df)) == 2
     assert (df["date"][0]) == "202401"
     assert (df["date"][1]) == "202301"
+
+
+def test_clear_station_table(init_database, create_2_Station) -> None:
+    data = create_2_Station
+    engine = init_database
+    insert_data(data, engine)
+
+    clear_station_table(engine)
+
+    df = get_all_stations(engine)
+    assert (len(df)) == 0
+
+
+def test_get_all_stations(init_database, create_2_Station) -> None:
+    data = create_2_Station
+    engine = init_database
+    insert_data(data, engine)
+
+    df = get_all_stations(engine)
+    assert (df["station_id"][0]) == 102
+    assert (df["station_name"][0]) == "Bordeaux"
+    assert (df["station_id"][1]) == 103
+    assert (df["station_name"][1]) == "Paris"
