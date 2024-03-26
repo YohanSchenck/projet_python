@@ -8,13 +8,48 @@
   </head>
   <body>
     <h1>YFECHOOUPA</h1>
-    <h2>Voici la liste des graphiques disponibles</h2>
-    <ul>
-      {% for chart in charts %}
-      <li>
-        <a href="/chart/?chart={{ chart }}" class="racoon">{{chart}}</a>
-      </li>
-      {% endfor %}
-    </ul>
+    <div class="station-select-container">
+      <label for="station-select">Graphique par station :</label>
+      <select
+        name="stations"
+        id="station-select"
+        onchange="location = this.value;"
+      >
+        {% for station in stations %}
+        <option value="/station/{{ station.station_id }}">
+          {{ station.station_name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="station-select-container">
+      <label for="station-select">Années les plus chaudes par station :</label>
+      <select
+        name="stations"
+        id="station-select"
+        onchange="location = this.value;"
+      >
+        {% for station in stations %}
+        <option value="/top_hottest_year/{{ station.station_id }}">
+          {{ station.station_name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <h2>
+      <a href="/chart/evolution_temperature">
+        Graphique de l'évolution des températures de chaque station
+      </a>
+    </h2>
+    <h2>
+      <a href="/chart/evolution_wind">
+        Nombre de jours où les léoliennes n'ont pas pu fonctionner
+      </a>
+    </h2>
+    <h2>
+      <a href="/chart/difference_temperature">
+        Ecart maximum de température dans une semaine
+      </a>
+    </h2>
   </body>
 </html>

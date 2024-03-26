@@ -3,4 +3,5 @@ venv/
 __pycache__/
 .coverage
 static/charts/*
-database/
+database/database.db
+```

@@ -3,7 +3,7 @@
 Commande pour lancer le serveur
 
 ```
-uvicorn app.main:app --reload
+uvicorn app.main:APP --reload
 ```
 
 ```bash
@@ -37,4 +37,8 @@ Activer env :
 .\venv\Scripts\activate
 ```
 
-Donnnées chargés jusqu'a 2000-01 inclu
+Run Moulinette sans compromettre le module
+
+```bash
+python -m moulinette.upload
+```

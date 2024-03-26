@@ -23,7 +23,7 @@ def monthly_dates_generator(
             start_date = datetime(start_date.year, start_date.month + 1, 1)
 
 
-def request_data(request_date: str) -> pd.DataFrame:
+def request_meteo(request_date: str) -> pd.DataFrame:
     url = BASE_URL.format(date=request_date)
 
     try:
@@ -35,7 +35,7 @@ def request_data(request_date: str) -> pd.DataFrame:
     return data
 
 
-def process_data(df: pd.DataFrame) -> dict:
+def process_meteo(df: pd.DataFrame) -> str:
     df.rename(
         columns={
             "numer_sta": "station_id",
@@ -68,6 +68,6 @@ def process_data(df: pd.DataFrame) -> dict:
 if __name__ == "__main__":
     for monthly_date in monthly_dates_generator():
         print(f"Processing data for {monthly_date} ...")
-        request_data(monthly_date)
+        request_meteo(monthly_date)
 
         break

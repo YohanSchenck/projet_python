@@ -6,7 +6,22 @@ body {
   background-image: url('./assets/background.png');
   background-size: cover;
   background-attachment: fixed;
+
 }
+
+body {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-image: url('./assets/background.png');
+  background-size: cover;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 
 h1 {
   font-size: 2em;
@@ -23,10 +38,6 @@ h1 {
   animation: pulse 2s infinite;
 }
 
-h1:hover {
-  transform: rotate(-5deg);
-}
-
 h2 {
   font-size: 1.5em;
   color: #000000;
@@ -35,6 +46,67 @@ h2 {
   border-radius: 10px;
   background-attachment: fixed;
 }
+
+h1:hover {
+  transform: rotate(-5deg);
+}
+
+h2 a {
+  color: #3498db;
+  text-decoration: none;
+  background-color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+h2 a:hover {
+  color: #ffffff;
+  background-color: #3498db;
+  text-decoration: underline;
+}
+
+.station-select-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.station-select-container label,
+.station-select-container select {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  color: #3498db;
+  background-color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.station-select-container select:hover {
+  background-color: #3498db;
+  color: #ffffff;
+}
+
+.chart-title {
+  color: #3498db;
+  background-color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+label {
+  margin: 0;
+}
+
 
 ul {
   list-style-type: none;
@@ -51,7 +123,9 @@ img {
 }
 
 .link-button {
-  position: relative;
+  position: absolute;
+  top: 20px;
+  left: 20px;
   display: inline-block;
   padding: 8px 16px;
   color: #ffffff;
@@ -67,30 +141,13 @@ img {
   color: #fff;
   box-shadow: 0 0 5px #675fdd, 0 0 25px #675fdd, 0 0 50px #675fdd, 0 0 200px #675fdd;
   transform: scale(1.1);
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
 
 .link-button:active {
   transform: translateY(2px);
-}
-
-.racoon {
-  position: relative;
-  display: inline-block;
-  background-color: white;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  text-decoration: none;
-  color: #000;
-  transition: all 0.3s ease, transform 0.2s ease-in-out;
-  cursor: pointer;
-}
-
-.racoon:hover {
-  background-color: #f0f0f0;
-  border-color: #888;
-  transform: translateY(-2px) scale(1.1);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes pulse {
