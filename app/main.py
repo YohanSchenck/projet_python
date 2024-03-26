@@ -1,5 +1,6 @@
+import threading
 from typing import List
-
+import uvicorn
 from data_management.model import Meteo, Station
 from data_management.sql_commands import (
     create_db,
@@ -7,6 +8,7 @@ from data_management.sql_commands import (
     get_all_stations,
     get_station_name,
     get_top_hottest_year,
+    get_unique_dates,
 )
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
@@ -102,20 +104,23 @@ async def get_top_year(request: Request, station_id: int) -> HTMLResponse:
 
 
 if __name__ == "__main__":
-    import uvicorn
-
     new_data = False
-    uvicorn.run(APP, host="localhost", port=8000)
-
+    host = "127.0.0.1"
+    port = 8000
+    webapp_thread = threading.Thread(
+        name="Web App FastApi",
+        daemon=True,
+        target=uvicorn.run,
+        args=(APP,),
+        kwargs={"host": host, "port": port},
+    )
+    webapp_thread.start()
+    dates = set(get_unique_dates(ENGINE)["date"])
     for monthly_date in monthly_dates_generator():
         print(f"Processing data for {monthly_date} ...")
-        year = monthly_date[:4]
-        month = monthly_date[4:]
-        if True:
+        if monthly_date not in dates:
             new_data = True
-            data = request_meteo(monthly_date)
-            processed_data = process_meteo(data)
-            response = upload_meteo(processed_data)
+            upload_meteo(process_meteo(request_meteo(monthly_date)))
 
     if new_data:
         print("New data has been uploaded")
@@ -124,3 +129,10 @@ if __name__ == "__main__":
         create_graph_wind(ENGINE)
         create_graph_temp_diff(ENGINE)
         print("Charts have been generated")
+
+    print(f"Webapp is running on http://{host}:{port} ...")
+    try:
+        while webapp_thread.is_alive():
+            webapp_thread.join(1)
+    except KeyboardInterrupt:
+        print("Webapp has been stopped")

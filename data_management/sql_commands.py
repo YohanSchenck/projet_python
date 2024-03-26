@@ -191,31 +191,20 @@ def get_top_hottest_year(engine: Engine, station: int) -> DataFrame:
     return df_hottest_year
 
 
-def verify_availibity_meteo(year: str, month: str, engine: Engine) -> None:
+def get_unique_dates(engine: Engine) -> DataFrame:
     """
-    Verify if the month given is saved in the database
+    Get all unique date
 
     Parameters
     ----------
     engine : engine database
-
-    year : year to verify
-
-    month : month to verify
 
     Returns
     -------
     """
     with engine.connect() as con:
         df = read_sql_query(
-            "SELECT COUNT(year) as occurence from Meteo WHERE year = :year AND month = :month",
+            "SELECT DISTINCT year|| printf('%02d', month) AS date FROM meteo;",
             con,
-            params={"year": year, "month": month},
         )
-    if df["occurence"].values[0] == 0:
-        return False
-    else:
-        return True
-
-
-print(verify_availibity_meteo("2026", "1", get_engine()))
+    return df
