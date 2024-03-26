@@ -21,7 +21,9 @@ def test_upload_meteo_success():
     # Simule une réponse réussie de l'API
     with requests_mock.Mocker() as m:
         m.post(
-            "http://localhost:8000/upload/", text='{"success": true}', status_code=200
+            "http://localhost:8000/upload_meteo/",
+            text='{"success": true}',
+            status_code=200,
         )
         response = upload_meteo(data_json)
 
@@ -44,7 +46,7 @@ def test_upload_meteo_failure():
 
     with requests_mock.Mocker() as m:
         m.post(
-            "http://localhost:8000/upload/",
+            "http://localhost:8000/upload_meteo/",
             text='{"error": "Failed to upload data"}',
             status_code=500,
         )
