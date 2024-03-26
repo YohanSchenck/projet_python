@@ -1,44 +1,40 @@
 # Projet Python
 
-Commande pour lancer le serveur
+## Description du projet
+L'idée du projet est de récupérer les données météo France afin de visualiser l'évolution de la température et de la force du vent depuis 1996 sur l'ensemble des stations météorologiques françaises
+
+## Commande pour lancer le serveur
+
+### Création d'un environnement python
 
 ```
-uvicorn app.main:APP --reload
+python -m venv venv
 ```
 
-```bash
-Request URL:
-https://donneespubliques.meteofrance.fr/donnees_libres/Txt/Synop/Archive/synop.202403.csv.gz
-Request Method:
-GET
-Status Code:
-200 OK (from disk cache)
-Remote Address:
-137.129.43.49:443
-Referrer Policy:
-strict-origin-when-cross-origin
+### Utilisation de l'environnement
+
+* Windows
+```
+venv/Scripts\activate
 ```
 
-Démarche :
-
-- **(WEBSITE)** Essayer de joindre le site web
-- Générer toutes les dates (format : AAAAMM) entre janvier 1996 et la date du jour
-- Boucler sur les étapes suivantes pour chaque date :
-  - Passer une requête GET à l'url donné
-  - Enregistrer en mémoire le fichier d'archive (format .gz)
-  - Accéder en mémoire à l'archive pour en faire un csv
-  - Accéder en mémoire au csv pour le transformer en json
-  - **(temporaire)** Stocker dans une dir json tous les fichiers
-  - **(WEBSITE)** Passer une requête POST au site web pour chaque json à envoyer
-
-Activer env :
-
-```bash
-.\venv\Scripts\activate
+* MACOS/ LINUX
+```
+source venv/bin/activate
 ```
 
-Run Moulinette sans compromettre le module
+### Importation des packages nécessaires
 
-```bash
-python -m moulinette.upload
 ```
+pip install -r requirements.txt
+```
+
+### Lancement du serveur
+
+```
+python -m app.main
+```
+
+## Couverture des tests
+
+![Alt text](/static/Tests/Coverage.png)
