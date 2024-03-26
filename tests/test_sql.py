@@ -9,6 +9,7 @@ from data_management.sql_commands import (
     get_evolution_diff_temperature,
     get_evolution_wind,
     get_station_name,
+    get_unique_dates,
     insert_data,
 )
 from sqlalchemy import Engine
@@ -132,10 +133,12 @@ def test_get_station_name(init_database, create_2_Station):
     assert (get_station_name(102, engine)) == "Bordeaux"
 
 
-# def test_verify_availibity_meteo(init_database, create_3_Meteo) -> None:
-#     data = create_3_Meteo
-#     engine = init_database
-#     insert_data(data, engine)
+def test_get_unique_dates(init_database, create_3_Meteo) -> None:
+    data = create_3_Meteo
+    engine = init_database
+    insert_data(data, engine)
+    df = get_unique_dates(engine=engine)
 
-#     assert verify_availibity_meteo("2024", "1", engine=engine)
-#     assert (verify_availibity_meteo("2027", "1", engine=engine)) == False
+    assert (len(df)) == 2
+    assert (df["date"][0]) == "202401"
+    assert (df["date"][1]) == "202301"
