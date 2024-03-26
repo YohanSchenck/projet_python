@@ -8,7 +8,7 @@
   </head>
   <body>
     <a href="/" class="link-button">Home</a>
-    <h1>{{ station_name }}</h1>
+    <h2 class="chart-title">{{ station_name }}</h2>
     {% for chart in charts %}
     <h2>{{ chart.title }}</h2>
     <img src="/static/charts/{{ chart.path }}" />

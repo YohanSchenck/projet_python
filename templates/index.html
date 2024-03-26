@@ -9,26 +9,20 @@
   <body>
     <h1>YFECHOOUPA</h1>
     <div class="station-select-container">
-      <label for="station-select">Graphique par station :</label>
-      <select
-        name="stations"
-        id="station-select"
-        onchange="location = this.value;"
-      >
+      <label for="graph-station-select">Graphique par station :</label>
+      <select name="stations" id="graph-station-select" onchange="location = this.value;">
+        <option value="" disabled selected>Choisir</option>
         {% for station in stations %}
-        <option value="/station/{{ station.station_id }}">
-          {{ station.station_name }}
-        </option>
+          <option value="/station/{{ station.station_id }}">
+            {{ station.station_name }}
+          </option>
         {% endfor %}
       </select>
     </div>
     <div class="station-select-container">
-      <label for="station-select">Années les plus chaudes par station :</label>
-      <select
-        name="stations"
-        id="station-select"
-        onchange="location = this.value;"
-      >
+      <label for="hot-years-station-select">Années les plus chaudes par station :</label>
+      <select name="hot_years_stations" id="hot-years-station-select" onchange="location = this.value;">
+        <option value="" disabled selected>Choisir</option>
         {% for station in stations %}
         <option value="/top_hottest_year/{{ station.station_id }}">
           {{ station.station_name }}

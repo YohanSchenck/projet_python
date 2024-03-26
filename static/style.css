@@ -66,6 +66,35 @@ h2 a:hover {
   text-decoration: underline;
 }
 
+.hotspot {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.hotspot label,
+.hotspot select {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  color: #3498db;
+  background-color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.hotspot select:hover {
+  background-color: #3498db;
+  color: #ffffff;
+}
+
 .station-select-container {
   font-family: Arial, sans-serif;
   padding: 20px;
@@ -149,6 +178,53 @@ img {
 .link-button:active {
   transform: translateY(2px);
 }
+
+table {
+  width: 60%;
+  border-collapse: separate;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  table-layout: fixed;
+  border-radius: 15px;
+  border-spacing: 0;
+}
+
+th {
+  background-color: #3498db;
+  text-align: center;
+  color: #ffffff;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  width: 50%;
+  border-bottom: 1px solid #ddd
+}
+
+td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  width: 50%;
+  border-bottom: 1px solid #ddd
+}
+
+
+tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+  width: 30%;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #e9e9e9;
+  width: 70%;
+}
+
+
+tbody tr:hover {
+  background-color: #ddd;
+}
+
 
 @keyframes pulse {
   0% {

@@ -5,7 +5,7 @@ STATION_URL = (
 )
 
 
-def request_station() -> str:
+def request_station(STATION_URL: str) -> str:
     try:
         data = pd.read_csv(STATION_URL, sep=";")
     except pd.errors.ParserError as error:
